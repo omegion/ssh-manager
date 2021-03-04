@@ -9,10 +9,10 @@ COVER_PROFILE      = $(REPORT_DIR)/coverage.out
 
 .PHONY: build
 build:
-	CGO_ENABLED=0 go build $(LDFLAGS) -installsuffix cgo -o dist/lpass-ssh main.go
+	CGO_ENABLED=0 go build $(LDFLAGS) -installsuffix cgo -o dist/bw-ssh main.go
 
 build-for-container:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -a -installsuffix cgo -o dist/lpass-ssh-linux cmd/lpass-ssh/main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -a -installsuffix cgo -o dist/bw-ssh-linux cmd/bw-ssh/main.go
 
 .PHONY: lint
 lint:
@@ -42,6 +42,6 @@ cut-tag:
 .PHONY: release
 release: build-for-container
 	@echo "Releasing $(GIT_VERSION)"
-	docker build -t lpass-ssh . --build-arg VERSION=$(GIT_VERSION)
-	docker tag lpass-ssh:latest omegion/lpass-ssh:$(GIT_VERSION)
-	docker push omegion/lpass-ssh:$(GIT_VERSION)
+	docker build -t bw-ssh . --build-arg VERSION=$(GIT_VERSION)
+	docker tag bw-ssh:latest omegion/bw-ssh:$(GIT_VERSION)
+	docker push omegion/bw-ssh:$(GIT_VERSION)

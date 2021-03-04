@@ -23,7 +23,7 @@ func setupGetCommand(cmd *cobra.Command) {
 func Get() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get",
-		Short: "Add SSH key to Bitwarden.",
+		Short: "Get SSH key from Bitwarden.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, _ := cmd.Flags().GetString("name")
 
