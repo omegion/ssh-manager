@@ -1,0 +1,92 @@
+run:
+  timeout: 5m
+  issues-exit-code: 1
+  tests: true
+  modules-download-mode: readonly
+
+linters-settings:
+  goimports:
+    local-prefixes: github.com/omegion/go-lpass-ssh
+  golint:
+    min-confidence: 0
+  govet:
+    check-shadowing: true
+  misspell:
+    locale: US
+  nolintlint:
+    allow-leading-space: false
+    allow-unused: false
+    require-explanation: true
+    require-specific: false
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - goerr113
+        - gocyclo
+        - errcheck
+        - gosec
+        - dupl
+        - funlen
+        - scopelint
+        - testpackage
+
+linters:
+  disable-all: true
+  enable:
+    - deadcode
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - structcheck
+    - typecheck
+    - unused
+    - varcheck
+    - asciicheck
+    - bodyclose
+    - depguard
+    - dogsled
+    - dupl
+    - exportloopref
+    - funlen
+    - gochecknoglobals
+    - gochecknoinits
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - godot
+    - godox
+    - goerr113
+    - gofmt
+    - gofumpt
+    - goimports
+    - golint
+    - gomnd
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - interfacer
+    - lll
+    - maligned
+    - misspell
+    - nakedret
+    - nestif
+    - noctx
+    - nolintlint
+    - prealloc
+    - rowserrcheck
+    - scopelint
+    - sqlclosecheck
+    - stylecheck
+    - unconvert
+    - unparam
+    - whitespace
+    - wsl
+    - tparallel
+    # don't enable:
+    # - go-header
+    # - testpackage
