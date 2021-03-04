@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 
@@ -71,6 +72,8 @@ func Add() *cobra.Command {
 			if err != nil {
 				return err
 			}
+
+			fmt.Print("Key saved.\n", name)
 
 			return nil
 		},
