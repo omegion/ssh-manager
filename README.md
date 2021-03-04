@@ -31,7 +31,7 @@ Use "bw-ssh [command] --help" for more information about a command.
 
 ## What does it do?
 
-Injects SSK keys to `ssh-agent` stored in Bitwarden.
+Injects SSL keys to `ssh-agent` stored in Bitwarden.
 
 ## How to use it
 
