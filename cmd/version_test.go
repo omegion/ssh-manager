@@ -5,9 +5,7 @@ import (
 )
 
 func TestGetCommand(t *testing.T) {
-	_, err := executeCommand(Get(),
-		"--name=ssh-test-1",
-	)
+	_, err := executeCommand(Version())
 	if err != nil {
 		t.Errorf("Command Error: %v", err)
 	}
