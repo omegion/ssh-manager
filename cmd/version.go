@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/omegion/lpass-ssh/pkg/info"
+	"github.com/omegion/bw-ssh/pkg/info"
 
 	"github.com/spf13/cobra"
 )

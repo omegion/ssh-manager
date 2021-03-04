@@ -1,6 +1,6 @@
 export PATH := $(abspath ./vendor/bin):$(PATH)
 
-BASE_PACKAGE_NAME  = github.com/omegion/lpass-ssh
+BASE_PACKAGE_NAME  = github.com/omegion/bw-ssh
 GIT_VERSION = $(shell git describe --tags --always 2> /dev/null || echo 0.0.0)
 LDFLAGS            = -ldflags "-X $(BASE_PACKAGE_NAME)/pkg/info.Version=$(GIT_VERSION)"
 BUFFER            := $(shell mktemp)

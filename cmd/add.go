@@ -1,35 +1,40 @@
 package cmd
 
 import (
-	"github.com/omegion/lpass-ssh/pkg/lpass"
-	"github.com/spf13/cobra"
 	"io/ioutil"
 	"log"
+
+	"github.com/omegion/bw-ssh/pkg/bw"
+
+	"github.com/spf13/cobra"
 )
 
 // setupAddCommand sets default flags.
 func setupAddCommand(cmd *cobra.Command) {
 	cmd.Flags().String("name", "", "Name")
+
 	if err := cmd.MarkFlagRequired("name"); err != nil {
 		log.Fatalf("Lethal damage: %s\n\n", err)
 	}
 
 	cmd.Flags().String("public-key", "", "Public Key file")
+
 	if err := cmd.MarkFlagRequired("public-key"); err != nil {
 		log.Fatalf("Lethal damage: %s\n\n", err)
 	}
 
 	cmd.Flags().String("private-key", "", "Private Key file")
+
 	if err := cmd.MarkFlagRequired("private-key"); err != nil {
 		log.Fatalf("Lethal damage: %s\n\n", err)
 	}
 }
 
-// Add creates SSH key into LastPass.
+// Add creates SSH key into Bitwarden.
 func Add() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "add",
-		Short: "Add SSH key to LastPass.",
+		Short: "Add SSH key to Bitwarden.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, _ := cmd.Flags().GetString("name")
 			publicKeyFileName, _ := cmd.Flags().GetString("public-key")
@@ -45,15 +50,24 @@ func Add() *cobra.Command {
 				return err
 			}
 
-			sshKey := lpass.SSHKey{
-				Name:       name,
-				PublicKey:  publicKey,
-				PrivateKey: privateKey,
+			item := bw.Item{
+				Type: 1,
+				Name: name,
+				Notes: []bw.Field{
+					{
+						Name:  "public_key",
+						Value: publicKey,
+					},
+					{
+						Name:  "private_key",
+						Value: privateKey,
+					},
+				},
 			}
 
-			lastPass := lpass.NewLastPass()
+			bitwarden := bw.Bitwarden{}
 
-			err = lastPass.Add(sshKey)
+			err = bitwarden.Add(item)
 			if err != nil {
 				return err
 			}

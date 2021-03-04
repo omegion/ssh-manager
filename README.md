@@ -1,6 +1,6 @@
 # lpass-ssh
 
-LastPass SSH Manager
+Bitwarden SSH Manager
 
 ```shell
 printf "Private Key: %s\nPublic Key: %s\n" \

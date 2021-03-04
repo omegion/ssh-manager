@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/omegion/lpass-ssh/cmd"
+	"github.com/omegion/bw-ssh/cmd"
 
 	"github.com/spf13/cobra"
 )
@@ -9,13 +9,13 @@ import (
 // RootCommand is the main entry point of this application.
 func RootCommand() *cobra.Command {
 	root := &cobra.Command{
-		Use:   "lpass-ssh",
-		Short: "LastPass SSH Manager",
-		Long:  "CLI command to manage SSH keys stored on LastPass",
+		Use:          "bw-ssh",
+		Short:        "Bitwarden SSH Manager",
+		Long:         "CLI command to manage SSH keys stored on Bitwarden",
+		SilenceUsage: true,
 	}
 
 	root.AddCommand(cmd.Version())
-	root.AddCommand(cmd.Sync())
 	root.AddCommand(cmd.Add())
 	root.AddCommand(cmd.Get())
 
