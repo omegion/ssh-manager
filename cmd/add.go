@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/omegion/bw-ssh/pkg/bw"
+	"github.com/omegion/bw-ssh/pkg/exec"
 
 	"github.com/spf13/cobra"
 )
@@ -66,8 +67,9 @@ func Add() *cobra.Command {
 				},
 			}
 
-			bitwarden := bw.Bitwarden{}
-
+			bitwarden := bw.Bitwarden{
+				Commander: exec.Commander{},
+			}
 			err = bitwarden.Add(item)
 			if err != nil {
 				return err

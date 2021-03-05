@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/omegion/bw-ssh/pkg/exec"
 	"log"
 
 	"github.com/omegion/bw-ssh/pkg/bw"
@@ -27,7 +28,9 @@ func Get() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, _ := cmd.Flags().GetString("name")
 
-			bitwarden := bw.Bitwarden{}
+			bitwarden := bw.Bitwarden{
+				Commander: exec.Commander{},
+			}
 
 			item, err := bitwarden.Get(name)
 			if err != nil {

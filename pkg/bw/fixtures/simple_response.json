@@ -1,0 +1,20 @@
+[
+  {
+    "object": "item",
+    "id": "test-ssh-id",
+    "organizationId": null,
+    "folderId": "test-folder-id",
+    "type": 1,
+    "name": "test-ssh",
+    "notes": "W3sibmFtZSI6InB1YmxpY19rZXkiLCJ2YWx1ZSI6IlgifSx7Im5hbWUiOiJwcml2YXRlX2tleSIsInZhbHVlIjoiWSJ9XQ==",
+    "favorite": false,
+    "login": {
+      "username": null,
+      "password": null,
+      "totp": null,
+      "passwordRevisionDate": null
+    },
+    "collectionIds": [],
+    "revisionDate": "2021-03-04T21:11:49.076Z"
+  }
+]

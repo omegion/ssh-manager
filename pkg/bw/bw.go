@@ -4,25 +4,28 @@ import (
 	"encoding/json"
 	"fmt"
 	"os/exec"
+
+	cmd "github.com/omegion/bw-ssh/pkg/exec"
 )
 
 const (
-	defaultFolderName = "SSHKeys"
-	bitwardenCommand  = "bw"
+	DefaultFolderName = "SSHKeys"
+	BitwardenCommand  = "bw"
 )
 
 // Bitwarden for connection.
 type Bitwarden struct {
-	Items    []Item
-	FolderID string
-	Options  []string
+	Items     []Item
+	FolderID  string
+	Options   []string
+	Commander cmd.CommanderInterface
 }
 
 // Sync updates local cache.
 func (l *Bitwarden) Sync() error {
 	options := l.syncOptions()
 
-	_, err := exec.Command(bitwardenCommand, options...).Output()
+	_, err := l.Commander.Output(BitwardenCommand, options...)
 	if err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
 			return exitError
@@ -32,14 +35,14 @@ func (l *Bitwarden) Sync() error {
 	return nil
 }
 
-func (l *Bitwarden) getFolder() (Folder, error) {
+func (l *Bitwarden) GetFolder() (Folder, error) {
 	folder := Folder{
-		Name: defaultFolderName,
+		Name: DefaultFolderName,
 	}
 
 	options := l.getFolderOptions(folder)
 
-	out, err := exec.Command(bitwardenCommand, options...).Output()
+	out, err := l.Commander.Output(BitwardenCommand, options...)
 	if err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
 			return folder, exitError
@@ -63,7 +66,7 @@ func (l *Bitwarden) getFolder() (Folder, error) {
 	return folder, nil
 }
 
-func (l *Bitwarden) getItems() error {
+func (l *Bitwarden) GetItems() error {
 	//nolint:nestif // refactor this function.
 	if len(l.Items) == 0 || l.FolderID == "" {
 		err := l.Sync()
@@ -71,14 +74,14 @@ func (l *Bitwarden) getItems() error {
 			return err
 		}
 
-		folder, err := l.getFolder()
+		folder, err := l.GetFolder()
 		if err != nil {
 			return err
 		}
 
 		options := l.listOptions(folder)
 
-		out, err := exec.Command(bitwardenCommand, options...).Output()
+		out, err := l.Commander.Output(BitwardenCommand, options...)
 		if err != nil {
 			if exitError, ok := err.(*exec.ExitError); ok {
 				return exitError
@@ -96,7 +99,7 @@ func (l *Bitwarden) getItems() error {
 
 // Get gets item from Bitwarden.
 func (l *Bitwarden) Get(name string) (Item, error) {
-	err := l.getItems()
+	err := l.GetItems()
 	if err != nil {
 		return Item{}, err
 	}
@@ -128,14 +131,14 @@ func (l *Bitwarden) Add(item Item) error {
 
 	item.FolderID = l.FolderID
 
-	holder, err := item.Encode()
+	encodedItem, err := item.Encode()
 	if err != nil {
 		return err
 	}
 
-	options := l.addOptions(holder)
+	options := l.addOptions(encodedItem)
 
-	_, err = exec.Command(bitwardenCommand, options...).Output()
+	_, err = l.Commander.Output(BitwardenCommand, options...)
 	if err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
 			return exitError
