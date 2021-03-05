@@ -42,6 +42,6 @@ cut-tag:
 .PHONY: release
 release: build-for-container
 	@echo "Releasing $(GIT_VERSION)"
-	docker build -t bw-ssh . --build-arg VERSION=$(GIT_VERSION)
+	docker build -t bw-ssh .
 	docker tag bw-ssh:latest omegion/bw-ssh:$(GIT_VERSION)
 	docker push omegion/bw-ssh:$(GIT_VERSION)
