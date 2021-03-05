@@ -3,7 +3,6 @@ package bw_test
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"testing"
 
@@ -28,9 +27,7 @@ func TestBitwarden_Sync(t *testing.T) {
 	}
 
 	err := bitwarden.Sync()
-	if err != nil {
-		log.Fatal(err)
-	}
+	assert.Equal(t, err, nil)
 }
 
 func TestBitwarden_GetItems(t *testing.T) {
@@ -42,7 +39,7 @@ func TestBitwarden_GetItems(t *testing.T) {
 
 	getFolderOutput, err := getGetFolderCommanderOutput()
 	if err != nil {
-		log.Fatal(err)
+		assert.Equal(t, err, nil)
 	}
 
 	m.EXPECT().Output(bw.BitwardenCommand, getSyncCommanderOptions()).Return(nil, nil)
@@ -55,7 +52,7 @@ func TestBitwarden_GetItems(t *testing.T) {
 
 	err = bitwarden.GetItems()
 	if err != nil {
-		log.Fatal(err)
+		assert.Equal(t, err, nil)
 	}
 }
 
@@ -68,12 +65,12 @@ func TestBitwarden_GetAndDuplicateAddFailure(t *testing.T) {
 
 	getFolderOutput, err := getGetFolderCommanderOutput()
 	if err != nil {
-		log.Fatal(err)
+		assert.Equal(t, err, nil)
 	}
 
 	getItemsOutput, err := getGetItemCommanderOutput()
 	if err != nil {
-		log.Fatal(err)
+		assert.Equal(t, err, nil)
 	}
 
 	m.EXPECT().Output(bw.BitwardenCommand, getSyncCommanderOptions()).Return(nil, nil).Times(1)
@@ -103,7 +100,7 @@ func TestBitwarden_GetAndDuplicateAddFailure(t *testing.T) {
 
 	expectedItem, err := bitwarden.Get(item.Name)
 	if err != nil {
-		log.Fatal(err)
+		assert.Equal(t, err, nil)
 	}
 
 	assert.Equal(t, expectedItem, item)
@@ -122,7 +119,7 @@ func TestBitwarden_Add(t *testing.T) {
 
 	getFolderOutput, err := getGetFolderCommanderOutput()
 	if err != nil {
-		log.Fatal(err)
+		assert.Equal(t, err, nil)
 	}
 
 	item := bw.Item{
@@ -144,7 +141,7 @@ func TestBitwarden_Add(t *testing.T) {
 
 	encodedItem, err := item.Encode()
 	if err != nil {
-		log.Fatal(err)
+		assert.Equal(t, err, nil)
 	}
 
 	m.EXPECT().Output(bw.BitwardenCommand, getSyncCommanderOptions()).Return(nil, nil).Times(1)
@@ -158,7 +155,7 @@ func TestBitwarden_Add(t *testing.T) {
 
 	err = bitwarden.Add(item)
 	if err != nil {
-		log.Fatal(err)
+		assert.Equal(t, err, nil)
 	}
 }
 
@@ -185,6 +182,7 @@ func getGetFolderCommanderOptions() []string {
 		bw.DefaultFolderName,
 	}
 }
+
 func getAddItemCommanderOptions(encodedItem string) []string {
 	return []string{
 		"create",

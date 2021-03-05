@@ -9,8 +9,10 @@ import (
 )
 
 const (
+	// DefaultFolderName default folder name for Bitwarden.
 	DefaultFolderName = "SSHKeys"
-	BitwardenCommand  = "bw"
+	// BitwardenCommand base command for Bitwarden.
+	BitwardenCommand = "bw"
 )
 
 // Bitwarden for connection.
@@ -35,6 +37,7 @@ func (l *Bitwarden) Sync() error {
 	return nil
 }
 
+// GetFolder gets default folder.
 func (l *Bitwarden) GetFolder() (Folder, error) {
 	folder := Folder{
 		Name: DefaultFolderName,
@@ -66,6 +69,7 @@ func (l *Bitwarden) GetFolder() (Folder, error) {
 	return folder, nil
 }
 
+// GetItems gets all items under the default folder.
 func (l *Bitwarden) GetItems() error {
 	//nolint:nestif // refactor this function.
 	if len(l.Items) == 0 || l.FolderID == "" {

@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/omegion/bw-ssh/pkg/exec"
 	"log"
 
 	"github.com/omegion/bw-ssh/pkg/bw"
+	"github.com/omegion/bw-ssh/pkg/exec"
 	"github.com/omegion/bw-ssh/pkg/io"
 
 	"github.com/spf13/cobra"
