@@ -19,3 +19,9 @@
 
 # Build
 dist
+
+# Docs
+docs/.idea
+docs/yarn.lock
+docs/node_modules
+!docs/src/.vuepress/dist
