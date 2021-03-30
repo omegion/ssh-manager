@@ -1,9 +1,20 @@
-# Bitwarden SSH Manager
+<h1 align="center">
+Bitwarden SSH Manager
+</h1>
 
-[![GithubBuild](https://img.shields.io/github/workflow/status/omegion/bw-ssh/Code%20Check)](http://pkg.go.dev/github.com/omegion/bw-ssh)
-[![Coverage Status](https://coveralls.io/repos/github/omegion/bw-ssh/badge.svg?branch=master)](https://coveralls.io/github/omegion/bw-ssh?branch=master)
-[![Go Report Card](https://goreportcard.com/badge/github.com/omegion/bw-ssh)](https://goreportcard.com/report/github.com/omegion/bw-ssh)
-[![GoDoc](https://img.shields.io/badge/pkg.go.dev-doc-blue)](http://pkg.go.dev/github.com/omegion/bw-ssh)
+<p align="center">
+  <a href="https://omegion.github.io/bw-ssh-docs/" target="_blank">
+    <img width="180" src="https://omegion.github.io/bw-ssh-docs/img/logo.svg" alt="logo">
+  </a>
+</p>
+
+<p align="center">
+    <img src="https://img.shields.io/github/workflow/status/omegion/bw-ssh/Code%20Check" alt="Check"></a>
+    <img src="https://coveralls.io/repos/github/omegion/bw-ssh/badge.svg?branch=master" alt="Coverall"></a>
+    <img src="https://goreportcard.com/badge/github.com/omegion/bw-ssh" alt="Report"></a>
+    <a href="http://pkg.go.dev/github.com/omegion/bw-ssh"><img src="https://img.shields.io/badge/pkg.go.dev-doc-blue" alt="Doc"></a>
+    <a href="https://github.com/omegion/bw-ssh/blob/master/LICENSE"><img src="https://img.shields.io/github/license/omegion/bw-ssh" alt="License"></a>
+</p>
 
 ```shell
 CLI command to manage SSH keys stored on Bitwarden
