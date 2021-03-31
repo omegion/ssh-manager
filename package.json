@@ -1,0 +1,19 @@
+{
+  "name": "bw-ssh-docs",
+  "version": "0.0.1",
+  "description": "Bitwarden SSH Manager Documentation",
+  "main": "index.js",
+  "authors": {
+    "name": "omegion",
+    "email": "oomegion@gmail.com"
+  },
+  "repository": "https://github.com/omegion/bw-ssh-docs/bw-ssh-docs",
+  "scripts": {
+    "dev": "vuepress dev src",
+    "build": "vuepress build src"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.5.3"
+  }
+}

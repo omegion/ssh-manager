@@ -2,63 +2,61 @@ name: Build
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - public
 jobs:
-  push_to_registry:
-    name: Push Docker image to Docker Hub and GitHub
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        node: [ 14 ]
+
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
+      - name: Checkout 🛎
+        uses: actions/checkout@master
 
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+      - name: Setup node env 🏗
+        uses: actions/setup-node@v2.1.2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          node-version: ${{ matrix.node }}
 
-      - name: Build and push to Docker
-        id: docker_build
-        uses: docker/build-push-action@v2
+      - name: Get yarn cache directory path 🛠
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache node_modules 📦
+        uses: actions/cache@v2
+        id: yarn-cache
         with:
-          context: ./
-          file: ./Dockerfile
-          push: true
-          tags: omegion/bw-ssh:${{ steps.get_version.outputs.VERSION }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
-      - name: Login to GitHub
-        uses: docker/login-action@v1
+      - name: Install dependencies 👨🏻‍💻
+        run: yarn
+
+      - name: Build ⚙️
+        run: yarn build
+
+      - uses: fregante/setup-git-user@v1
+
+      - uses: actions/checkout@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.CR_PAT }}
+          ref: public
+          clean: false
 
-      - name: Build and push to GitHub
-        id: github_build
-        uses: docker/build-push-action@v2
+      - name: Commit files
+        run: |
+          git add docs
+          git commit -m "Add changes" -a
+          git push origin public
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
-          context: ./
-          file: ./Dockerfile
-          push: true
-          tags: ghcr.io/omegion/bw-ssh:${{ steps.get_version.outputs.VERSION }}
-
-      - name: Build Changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          name: Release ${{ steps.get_version.outputs.VERSION }}
-          body: |
-            ${{steps.github_release.outputs.changelog}}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          branch: public
+          folder: docs
+          clean: true
