@@ -4,7 +4,7 @@ Bitwarden SSH Manager
 
 <p align="center">
   <a href="https://bw-ssh.omegion.dev" target="_blank">
-    <img width="180" src="https://omegion.github.io/bw-ssh-docs/img/logo.svg" alt="logo">
+    <img width="180" src="https://bw-ssh.omegion.dev/img/logo.svg" alt="logo">
   </a>
 </p>
 
