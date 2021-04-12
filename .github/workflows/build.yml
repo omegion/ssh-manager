@@ -17,31 +17,14 @@ jobs:
         uses: hashicorp/vault-action@v2.1.2
         with:
           url: ${{ secrets.VAULT_ADDR }}
-          token: ${{ secrets.VAULT_TOKEN }}
+          method: github
+          githubToken: ${{ secrets.GT_VAULT_AUTH_TOKEN }}
           secrets: |
             github/data/token registry_write | GITHUB_REGISTRY_TOKEN ;
-            docker/data/omegion username | DOCKER_USERNAME ;
-            docker/data/omegion password | DOCKER_PASSWORD ;
-
 
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ steps.secrets.outputs.DOCKER_USERNAME }}
-          password: ${{ steps.secrets.outputs.DOCKER_PASSWORD }}
-
-      - name: Build and push to Docker
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: ./Dockerfile
-          push: true
-          tags: omegion/bw-ssh:${{ steps.get_version.outputs.VERSION }}
 
       - name: Login to GitHub
         uses: docker/login-action@v1
