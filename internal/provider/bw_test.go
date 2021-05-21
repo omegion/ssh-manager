@@ -101,7 +101,7 @@ func TestBitwarden_GetNotFound(t *testing.T) {
 		Commander: commander,
 	}
 
-	_, err := bw.Get("test2")
+	_, err := bw.Get("test")
 
 	assert.Error(t, err)
 	assert.NoError(t, e.Validate())
