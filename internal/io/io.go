@@ -1,17 +1,22 @@
 package io
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/user"
 	"path/filepath"
 	"strings"
 
-	"github.com/omegion/bw-ssh/pkg/ssh"
+	"github.com/omegion/bw-ssh/internal/ssh"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // WriteSSHKey creates file with given data and filename.
 func WriteSSHKey(fileName string, data []byte) error {
+	log.Debugln(fmt.Sprintf("Writing SSH key for %s.", fileName))
+
 	usr, err := user.Current()
 	if err != nil {
 		return err
