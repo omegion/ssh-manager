@@ -2,15 +2,16 @@ package provider
 
 import "fmt"
 
-// ProviderNotFound occurs when no provider found.
-type ProviderNotFound struct {
+// NotFound occurs when no provider found.
+type NotFound struct {
 	Name *string
 }
 
-func (e ProviderNotFound) Error() string {
+func (e NotFound) Error() string {
 	return fmt.Sprintf("no provider found for %s", *e.Name)
 }
 
+// ExecutionFailedError occurs when an execution fails.
 type ExecutionFailedError struct {
 	Command string
 	Message string
@@ -20,6 +21,7 @@ func (e ExecutionFailedError) Error() string {
 	return fmt.Sprintf("'%s': Execution failed: %s", e.Command, e.Message)
 }
 
+// ItemAlreadyExists occurs when given item is not found in the provder.
 type ItemAlreadyExists struct {
 	Name string
 }

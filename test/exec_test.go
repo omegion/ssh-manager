@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/acquia/kaas-cluster/test"
+	"github.com/omegion/bw-ssh/test"
+
 	"github.com/stretchr/testify/assert"
 )
 

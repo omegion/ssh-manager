@@ -7,6 +7,7 @@ type Commander struct {
 	Executor exec.Interface
 }
 
+// NewCommander is a factory for Commander.
 func NewCommander() Commander {
 	return Commander{
 		exec.New(),

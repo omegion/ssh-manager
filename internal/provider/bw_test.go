@@ -2,9 +2,10 @@ package provider_test
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/omegion/bw-ssh/internal/provider"
 	"github.com/omegion/bw-ssh/test"
-	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -12,6 +13,7 @@ import (
 func TestBitwarden_Add(t *testing.T) {
 	e := test.NewExecutor([]test.CommandWithOutput{
 		{
+			//nolint:lll // get this one from fixture.
 			Command:               "bw create item eyJpZCI6bnVsbCwidHlwZSI6MSwibmFtZSI6IlNTSEtleXNfX3Rlc3QiLCJub3RlcyI6Ilczc2libUZ0WlNJNkluQnlhWFpoZEdWZmEyVjVJaXdpZG1Gc2RXVWlPaUpZSW4wc2V5SnVZVzFsSWpvaWNIVmliR2xqWDJ0bGVTSXNJblpoYkhWbElqb2lXU0o5WFE9PSIsImxvZ2luIjoidGVzdCJ9",
 			StdOut:                test.Must(test.LoadFixture("bw_add.txt")),
 			StdErr:                []byte{},
@@ -40,7 +42,7 @@ func TestBitwarden_Add(t *testing.T) {
 		},
 	}
 
-	err := bw.Add(item)
+	err := bw.Add(&item)
 
 	assert.NoError(t, err)
 	assert.NoError(t, e.Validate())
@@ -93,7 +95,7 @@ func TestBitwarden_GetNotFound(t *testing.T) {
 	})
 
 	commander := provider.NewCommander()
-	//commander.Executor = e
+	commander.Executor = e
 
 	bw := provider.Bitwarden{
 		Commander: commander,

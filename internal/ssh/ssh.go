@@ -3,7 +3,9 @@ package ssh
 import (
 	"bytes"
 	"context"
+
 	"github.com/omegion/bw-ssh/internal/provider"
+
 	log "github.com/sirupsen/logrus"
 )
 

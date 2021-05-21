@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 )
 
+// APIInterface is an interface for all providers.
 type APIInterface interface {
 	Add(item *Item) error
 	Get(name string) (Item, error)

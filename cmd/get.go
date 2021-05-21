@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/omegion/bw-ssh/internal/io"
 	"github.com/omegion/bw-ssh/internal/provider"
 
@@ -58,7 +59,7 @@ func Get() *cobra.Command {
 				}
 
 				if readOnly {
-					fmt.Println(fmt.Sprintf("%s:", field.Name))
+					fmt.Printf("%s:\n", field.Name)
 					fmt.Println(field.Value)
 					continue
 				}
@@ -83,6 +84,6 @@ func decideProvider(name *string, commander *provider.Commander) (provider.APIIn
 	case provider.BitwardenCommand:
 		return provider.Bitwarden{Commander: *commander}, nil
 	default:
-		return provider.Bitwarden{}, provider.ProviderNotFound{Name: name}
+		return provider.Bitwarden{}, provider.NotFound{Name: name}
 	}
 }

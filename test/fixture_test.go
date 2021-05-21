@@ -3,7 +3,7 @@ package test_test
 import (
 	"testing"
 
-	"github.com/acquia/kaas-cluster/test"
+	"github.com/omegion/bw-ssh/test"
 )
 
 func TestLoadFixture_found(t *testing.T) {

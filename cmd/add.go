@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/omegion/bw-ssh/internal/provider"
 	"io/ioutil"
+
+	"github.com/omegion/bw-ssh/internal/provider"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

@@ -11,6 +11,7 @@ import (
 	"k8s.io/utils/exec"
 )
 
+// CommandWithOutput is a wrapper for tests.
 type CommandWithOutput struct {
 	Command               string
 	StdOut                []byte
@@ -19,14 +20,17 @@ type CommandWithOutput struct {
 	NumberCalls           int
 }
 
+// Executor is for Commander to test.
 type Executor struct {
 	stack []CommandWithOutput
 }
 
+// NewExecutor is a factory to create Executor.
 func NewExecutor(commands []CommandWithOutput) *Executor {
 	return &Executor{stack: commands}
 }
 
+// Validate validates the Executor stacks.
 func (e *Executor) Validate() error {
 	for _, cmd := range e.stack {
 		if cmd.ExpectedNumberOfCalls != cmd.NumberCalls {
@@ -37,16 +41,19 @@ func (e *Executor) Validate() error {
 	return nil
 }
 
+// Reset resets Executor stacks.
 func (e *Executor) Reset() {
 	for idx := range e.stack {
 		e.stack[idx].NumberCalls = 0
 	}
 }
 
+// Command is for single run commands.
 func (e *Executor) Command(cmd string, args ...string) exec.Cmd {
 	return e.CommandContext(context.Background(), cmd, args...)
 }
 
+// CommandContext is for commands with context.
 func (e *Executor) CommandContext(ctx context.Context, cmd string, args ...string) exec.Cmd {
 	command := strings.Join(append([]string{cmd}, args...), " ")
 
@@ -79,6 +86,7 @@ func (e *Executor) CommandContext(ctx context.Context, cmd string, args ...strin
 	}
 }
 
+// LookPath wraps os/exec.LookPath.
 func (e *Executor) LookPath(file string) (string, error) {
 	return file, nil
 }
@@ -132,6 +140,7 @@ func (m *mockCmd) SetStderr(out io.Writer) {}
 func (m *mockCmd) SetEnv(env []string)     {}
 func (m *mockCmd) Stop()                   {}
 
+// UnexpectedCommandCallError is error.
 type UnexpectedCommandCallError struct {
 	Command string
 }
@@ -140,6 +149,7 @@ func (e UnexpectedCommandCallError) Error() string {
 	return fmt.Sprintf("unexpected command: %s", e.Command)
 }
 
+// MissingCallError is for missing errors.
 type MissingCallError struct {
 	Command  string
 	Expected int

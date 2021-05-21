@@ -23,6 +23,7 @@ type Bitwarden struct {
 	Commander Commander
 }
 
+// BitwardenItem is item adapter for provider Item.
 type BitwardenItem struct {
 	ID    *string `json:"id"`
 	Type  int     `json:"type"`
@@ -31,6 +32,7 @@ type BitwardenItem struct {
 	Login string  `json:"login"`
 }
 
+// Add adds given item to Bitwarden.
 func (b Bitwarden) Add(item *Item) error {
 	_, err := b.Get(item.Name)
 	if err == nil {
@@ -77,6 +79,7 @@ func (b Bitwarden) Add(item *Item) error {
 	return nil
 }
 
+// Get gets Item from Bitwarden with given item name.
 func (b Bitwarden) Get(name string) (Item, error) {
 	err := b.Sync()
 	if err != nil {
@@ -133,6 +136,7 @@ func (b Bitwarden) Get(name string) (Item, error) {
 	return item, nil
 }
 
+// Sync syncs Bitwarden vault.
 func (b Bitwarden) Sync() error {
 	command := b.Commander.Executor.CommandContext(
 		context.Background(),
