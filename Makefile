@@ -7,7 +7,7 @@ else
 endif
 
 BASE_PACKAGE_NAME  = github.com/omegion/ssh-manager
-LDFLAGS            = -ldflags "-X $(BASE_PACKAGE_NAME)/pkg/info.Version=$(GIT_VERSION)"
+LDFLAGS            = -ldflags "-X $(BASE_PACKAGE_NAME)/internal/info.Version=$(GIT_VERSION)"
 BUFFER            := $(shell mktemp)
 REPORT_DIR         = dist/report
 COVER_PROFILE      = $(REPORT_DIR)/coverage.out
