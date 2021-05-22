@@ -3,14 +3,14 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/omegion/bw-ssh/internal/io"
-	"github.com/omegion/bw-ssh/internal/provider"
+	"github.com/omegion/ssh-manager/internal/io"
+	"github.com/omegion/ssh-manager/internal/provider"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
-// setupAddCommand sets default flags.
+// setupGetCommand sets default flags.
 func setupGetCommand(cmd *cobra.Command) {
 	cmd.Flags().String("name", "", "Name")
 
@@ -27,11 +27,11 @@ func setupGetCommand(cmd *cobra.Command) {
 	cmd.Flags().Bool("read-only", false, "Do not write fetched SSH keys")
 }
 
-// Get acquires SSH key from Bitwarden.
+// Get acquires SSH key from given provider.
 func Get() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get",
-		Short: "Get SSH key from Bitwarden.",
+		Short: "Get SSH key from given provider.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, _ := cmd.Flags().GetString("name")
 			providerName, _ := cmd.Flags().GetString("provider")
@@ -83,6 +83,8 @@ func decideProvider(name *string, commander *provider.Commander) (provider.APIIn
 	switch *name {
 	case provider.BitwardenCommand:
 		return provider.Bitwarden{Commander: *commander}, nil
+	case provider.OnePasswordCommand:
+		return provider.OnePassword{Commander: *commander}, nil
 	default:
 		return provider.Bitwarden{}, provider.NotFound{Name: name}
 	}

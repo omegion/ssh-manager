@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/omegion/bw-ssh/internal/ssh"
+	"github.com/omegion/ssh-manager/internal/ssh"
 
 	log "github.com/sirupsen/logrus"
 )

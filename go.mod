@@ -1,4 +1,4 @@
-module github.com/omegion/bw-ssh
+module github.com/omegion/ssh-manager
 
 go 1.16
 

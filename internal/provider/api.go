@@ -9,6 +9,7 @@ import (
 type APIInterface interface {
 	Add(item *Item) error
 	Get(name string) (Item, error)
+	List() ([]Item, error)
 }
 
 // Field is custom fields under Item.

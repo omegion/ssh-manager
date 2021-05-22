@@ -1,6 +1,6 @@
 export PATH := $(abspath ./vendor/bin):$(PATH)
 
-BASE_PACKAGE_NAME  = github.com/omegion/bw-ssh
+BASE_PACKAGE_NAME  = github.com/omegion/ssh-manager
 GIT_VERSION = $(shell git describe --tags --always 2> /dev/null || echo 0.0.0)
 LDFLAGS            = -ldflags "-X $(BASE_PACKAGE_NAME)/pkg/info.Version=$(GIT_VERSION)"
 BUFFER            := $(shell mktemp)
@@ -9,10 +9,10 @@ COVER_PROFILE      = $(REPORT_DIR)/coverage.out
 
 .PHONY: build
 build:
-	CGO_ENABLED=0 go build $(LDFLAGS) -installsuffix cgo -o dist/bw-ssh main.go
+	CGO_ENABLED=0 go build $(LDFLAGS) -installsuffix cgo -o dist/ssh-manager main.go
 
 build-for-container:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -a -installsuffix cgo -o dist/bw-ssh-linux main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -a -installsuffix cgo -o dist/ssh-manager-linux main.go
 
 .PHONY: lint
 lint:
@@ -42,6 +42,6 @@ cut-tag:
 .PHONY: release
 release: build-for-container
 	@echo "Releasing $(GIT_VERSION)"
-	docker build -t bw-ssh .
-	docker tag bw-ssh:latest omegion/bw-ssh:$(GIT_VERSION)
-	docker push omegion/bw-ssh:$(GIT_VERSION)
+	docker build -t ssh-manager .
+	docker tag ssh-manager:latest omegion/ssh-manager:$(GIT_VERSION)
+	docker push omegion/ssh-manager:$(GIT_VERSION)

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 
-	"github.com/omegion/bw-ssh/internal/provider"
+	"github.com/omegion/ssh-manager/internal/provider"
 
 	log "github.com/sirupsen/logrus"
 )

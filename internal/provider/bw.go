@@ -13,7 +13,7 @@ import (
 
 const (
 	// BitwardenDefaultPrefix default prefix for BitwardenItem.
-	BitwardenDefaultPrefix = "SSHKeys"
+	BitwardenDefaultPrefix = "SSHKeys__"
 	// BitwardenCommand base command for Bitwarden.
 	BitwardenCommand = "bw"
 )
@@ -47,7 +47,7 @@ func (b Bitwarden) Add(item *Item) error {
 	bwItem := BitwardenItem{
 		ID:    nil,
 		Type:  1,
-		Name:  fmt.Sprintf("%s__%s", BitwardenDefaultPrefix, item.Name),
+		Name:  fmt.Sprintf("%s%s", BitwardenDefaultPrefix, item.Name),
 		Notes: encodedValues,
 		Login: item.Name,
 	}
@@ -91,7 +91,7 @@ func (b Bitwarden) Get(name string) (Item, error) {
 		BitwardenCommand,
 		"get",
 		"item",
-		fmt.Sprintf("%s__%s", BitwardenDefaultPrefix, name),
+		fmt.Sprintf("%s%s", BitwardenDefaultPrefix, name),
 	)
 
 	var stderr bytes.Buffer
@@ -118,7 +118,7 @@ func (b Bitwarden) Get(name string) (Item, error) {
 
 	item := Item{
 		ID:   *tmpItem.ID,
-		Name: strings.Replace(tmpItem.Name, fmt.Sprintf("%s__", BitwardenDefaultPrefix), "", 1),
+		Name: strings.Replace(tmpItem.Name, BitwardenDefaultPrefix, "", 1),
 	}
 
 	log.Debugln(fmt.Sprintf("Decoding keys for item %s.", name))
@@ -134,6 +134,58 @@ func (b Bitwarden) Get(name string) (Item, error) {
 	}
 
 	return item, nil
+}
+
+// List lists all added SSH keys.
+func (b Bitwarden) List() ([]Item, error) {
+	err := b.Sync()
+	if err != nil {
+		return []Item{}, err
+	}
+
+	command := b.Commander.Executor.CommandContext(
+		context.Background(),
+		BitwardenCommand,
+		"list",
+		"items",
+		"--search",
+		BitwardenDefaultPrefix,
+	)
+
+	var stderr bytes.Buffer
+
+	command.SetStderr(&stderr)
+
+	log.Debugln("Getting items in Bitwarden.")
+
+	output, err := command.Output()
+	if err != nil {
+		return []Item{}, ExecutionFailedError{Command: "bw get", Message: stderr.String()}
+	}
+
+	type tmpItem struct {
+		ID    *string `json:"id"`
+		Name  string  `json:"name"`
+		Notes string  `json:"notes"`
+	}
+
+	var tmpItems []tmpItem
+
+	err = json.Unmarshal(output, &tmpItems)
+	if err != nil {
+		return []Item{}, err
+	}
+
+	var items []Item
+
+	for _, item := range tmpItems {
+		items = append(items, Item{
+			ID:   *item.ID,
+			Name: strings.Replace(item.Name, BitwardenDefaultPrefix, "", 1),
+		})
+	}
+
+	return items, nil
 }
 
 // Sync syncs Bitwarden vault.

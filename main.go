@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/omegion/bw-ssh/cmd"
+	"github.com/omegion/ssh-manager/cmd"
 )
 
 func main() {

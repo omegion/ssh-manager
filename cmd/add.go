@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/omegion/bw-ssh/internal/provider"
+	"github.com/omegion/ssh-manager/internal/provider"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -37,11 +37,11 @@ func setupAddCommand(cmd *cobra.Command) {
 	}
 }
 
-// Add creates SSH key into Bitwarden.
+// Add creates SSH key into given provider.
 func Add() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "add",
-		Short: "Add SSH key to Bitwarden.",
+		Short: "Add SSH key to given provider.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, _ := cmd.Flags().GetString("name")
 			publicKeyFileName, _ := cmd.Flags().GetString("public-key")

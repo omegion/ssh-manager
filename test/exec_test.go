@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/omegion/bw-ssh/test"
+	"github.com/omegion/ssh-manager/test"
 
 	"github.com/stretchr/testify/assert"
 )

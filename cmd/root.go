@@ -9,7 +9,7 @@ import (
 
 //nolint:gochecknoglobals // go generate is ugly.
 var rootCmd = &cobra.Command{
-	Use:          "bw-ssh",
+	Use:          "ssh-manager",
 	Short:        "Bitwarden SSH Manager",
 	Long:         "CLI command to manage SSH keys stored on Bitwarden",
 	SilenceUsage: true,
@@ -43,6 +43,7 @@ func Execute() {
 	rootCmd.AddCommand(Version())
 	rootCmd.AddCommand(Add())
 	rootCmd.AddCommand(Get())
+	rootCmd.AddCommand(List())
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)

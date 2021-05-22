@@ -3,7 +3,7 @@ package test_test
 import (
 	"testing"
 
-	"github.com/omegion/bw-ssh/test"
+	"github.com/omegion/ssh-manager/test"
 )
 
 func TestLoadFixture_found(t *testing.T) {

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/omegion/bw-ssh/internal/provider"
-	"github.com/omegion/bw-ssh/test"
+	"github.com/omegion/ssh-manager/internal/provider"
+	"github.com/omegion/ssh-manager/test"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -57,7 +57,7 @@ func TestBitwarden_Get(t *testing.T) {
 			ExpectedNumberOfCalls: 1,
 		},
 		{
-			Command:               fmt.Sprintf("bw get item %s__%s", provider.BitwardenDefaultPrefix, "test"),
+			Command:               fmt.Sprintf("bw get item %s%s", provider.BitwardenDefaultPrefix, "test"),
 			StdOut:                test.Must(test.LoadFixture("bw_get.txt")),
 			StdErr:                []byte{},
 			ExpectedNumberOfCalls: 1,
@@ -87,7 +87,7 @@ func TestBitwarden_GetNotFound(t *testing.T) {
 			ExpectedNumberOfCalls: 1,
 		},
 		{
-			Command:               fmt.Sprintf("bw get item %s__%s", provider.BitwardenDefaultPrefix, "test"),
+			Command:               fmt.Sprintf("bw get item %s%s", provider.BitwardenDefaultPrefix, "test"),
 			StdOut:                []byte{},
 			StdErr:                test.Must(test.LoadFixture("bw_get_not_found.txt")),
 			ExpectedNumberOfCalls: 1,
@@ -128,4 +128,43 @@ func TestBitwarden_Sync(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.NoError(t, e.Validate())
+}
+
+func TestBitwarden_List(t *testing.T) {
+	e := test.NewExecutor([]test.CommandWithOutput{
+		{
+			Command:               "bw sync",
+			StdOut:                test.Must(test.LoadFixture("bw_sync.txt")),
+			StdErr:                []byte{},
+			ExpectedNumberOfCalls: 1,
+		},
+		{
+			Command:               fmt.Sprintf("bw list items --search %s", provider.BitwardenDefaultPrefix),
+			StdOut:                test.Must(test.LoadFixture("bw_list.txt")),
+			StdErr:                []byte{},
+			ExpectedNumberOfCalls: 1,
+		},
+	})
+
+	commander := provider.NewCommander()
+	commander.Executor = e
+
+	bw := provider.Bitwarden{
+		Commander: commander,
+	}
+
+	items, err := bw.List()
+
+	expectedItems := []string{
+		"test1",
+		"test2",
+	}
+
+	assert.NoError(t, err)
+	assert.NoError(t, e.Validate())
+
+	for idx, item := range items {
+		assert.Equal(t, expectedItems[idx], item.Name)
+	}
+
 }
