@@ -176,7 +176,7 @@ func (b Bitwarden) List() ([]Item, error) {
 		return []Item{}, err
 	}
 
-	var items []Item
+	items := make([]Item, 0)
 
 	for _, item := range tmpItems {
 		items = append(items, Item{

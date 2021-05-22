@@ -139,5 +139,4 @@ func TestOnePassword_List(t *testing.T) {
 	for _, item := range items {
 		assert.Equal(t, expectedItems[item.ID], item.Name)
 	}
-
 }

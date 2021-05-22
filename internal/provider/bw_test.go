@@ -166,5 +166,4 @@ func TestBitwarden_List(t *testing.T) {
 	for idx, item := range items {
 		assert.Equal(t, expectedItems[idx], item.Name)
 	}
-
 }

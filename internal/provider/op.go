@@ -13,6 +13,7 @@ import (
 
 const (
 	// OnePasswordDefaultPrefix default prefix for OnePasswordItem.
+	//nolint:gosec // not security issue.
 	OnePasswordDefaultPrefix = "SSHKeys__"
 	// OnePasswordCommand base command for OnePassword.
 	OnePasswordCommand = "op"
@@ -156,7 +157,7 @@ func (o OnePassword) List() ([]Item, error) {
 		return []Item{}, err
 	}
 
-	var items []Item
+	items := make([]Item, 0)
 
 	for _, item := range opItems {
 		items = append(items, Item{
