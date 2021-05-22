@@ -4,7 +4,7 @@ SSH Key Manager for Bitwarden and 1Password
 
 <p align="center">
   <a href="https://ssh-manager.omegion.dev" target="_blank">
-    <img width="180" src="https://ssh-manager.omegion.dev/img/logo.svg" alt="logo">
+    <img width="180" src="https://ssh-manager.omegion.dev/img/logo.png" alt="logo">
   </a>
 </p>
 
