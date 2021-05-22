@@ -3,6 +3,8 @@ ARG FROM_IMAGE=alpine:3.12
 
 FROM golang:${GO_VERSION} AS builder
 
+ARG VERSION
+
 LABEL org.opencontainers.image.source="https://github.com/omegion/ssh-manager"
 
 WORKDIR /app
@@ -15,7 +17,7 @@ RUN apk update && \
   rm -rf /var/cache/apk/* && \
   rm -rf /var/tmp/*
 
-RUN make build-for-container
+RUN make build-for-container VERSION=$VERSION
 
 FROM ${FROM_IMAGE}
 

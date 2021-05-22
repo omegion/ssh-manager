@@ -41,6 +41,8 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ghcr.io/omegion/ssh-manager:${{ steps.get_version.outputs.VERSION }}
+          build-args: |
+            VERSION=${{ steps.get_version.outputs.VERSION }}
 
       - name: Build Changelog
         id: github_release

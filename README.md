@@ -37,6 +37,12 @@ Use "ssh-manager [command] --help" for more information about a command.
 
 ```
 
+## Installation
+
+```shell
+go get -u github.com/omegion/ssh-manager
+```
+
 ## Requirements
 
 * Have the [Bitwarden CLI tool](https://github.com/bitwarden/cli) installed and available in the `$PATH` as `bw`.
