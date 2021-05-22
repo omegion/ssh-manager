@@ -1,61 +1,73 @@
 <h1 align="center">
-Bitwarden SSH Manager
+SSH Key Manager for Bitwarden and 1Password
 </h1>
 
 <p align="center">
-  <a href="https://omegion.github.io/bw-ssh-docs/" target="_blank">
-    <img width="180" src="https://omegion.github.io/bw-ssh-docs/img/logo.svg" alt="logo">
+  <a href="https://ssh-manager.omegion.dev" target="_blank">
+    <img width="180" src="https://ssh-manager.omegion.dev/img/logo.svg" alt="logo">
   </a>
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/github/workflow/status/omegion/bw-ssh/Code%20Check" alt="Check"></a>
-    <img src="https://coveralls.io/repos/github/omegion/bw-ssh/badge.svg?branch=master" alt="Coverall"></a>
-    <img src="https://goreportcard.com/badge/github.com/omegion/bw-ssh" alt="Report"></a>
-    <a href="http://pkg.go.dev/github.com/omegion/bw-ssh"><img src="https://img.shields.io/badge/pkg.go.dev-doc-blue" alt="Doc"></a>
-    <a href="https://github.com/omegion/bw-ssh/blob/master/LICENSE"><img src="https://img.shields.io/github/license/omegion/bw-ssh" alt="License"></a>
+    <img src="https://img.shields.io/github/workflow/status/omegion/ssh-manager/Code%20Check" alt="Check"></a>
+    <img src="https://coveralls.io/repos/github/omegion/ssh-manager/badge.svg?branch=master" alt="Coverall"></a>
+    <img src="https://goreportcard.com/badge/github.com/omegion/ssh-manager" alt="Report"></a>
+    <a href="http://pkg.go.dev/github.com/omegion/ssh-manager"><img src="https://img.shields.io/badge/pkg.go.dev-doc-blue" alt="Doc"></a>
+    <a href="https://github.com/omegion/ssh-manager/blob/master/LICENSE"><img src="https://img.shields.io/github/license/omegion/ssh-manager" alt="License"></a>
 </p>
 
 ```shell
-CLI command to manage SSH keys stored on Bitwarden
+CLI command to manage SSH keys stored on Bitwarden and 1Password
 
 Usage:
-  bw-ssh [command]
+  ssh-manager [command]
 
 Available Commands:
-  add         Add SSH key to Bitwarden.
-  get         Get SSH key from Bitwarden.
+  add         Add SSH key to given provider.
+  get         Get SSH key from given provider.
   help        Help about any command
+  list        List SSH keys from given provider.
   version     Print the version/build number
 
 Flags:
-  -h, --help   help for bw-ssh
+  -h, --help              help for ssh-manager
+      --logLevel string   Set the logging level. One of: debug|info|warn|error (default "info")
 
-Use "bw-ssh [command] --help" for more information about a command.
+Use "ssh-manager [command] --help" for more information about a command.
 
 ```
 
 ## Requirements
 
 * Have the [Bitwarden CLI tool](https://github.com/bitwarden/cli) installed and available in the `$PATH` as `bw`.
+* Or have the [1Password CLI tool](https://1password.com/downloads/command-line/) installed and available in the `$PATH`
+  as `op`.
 * Have the `ssh-agent` running in the current session.
 
 ## What does it do?
 
-Injects SSL keys to `ssh-agent` stored in Bitwarden.
+Injects SSL keys to `ssh-agent` stored in Bitwarden or 1Password.
 
 ## How to use it
 
-1. Login to Bitwarden with `bw`.
-1. Create a folder named `SSHKeys` folder in your Bitwarden.
-1. Add your key pairs to Bitwarden
+1. Login to Bitwarden or 1Password with `bw` or `op`.
+1. Add your key pairs to your password manager.
+
+For Bitwarden
+---
 
 ```shell
-bw-ssh add --name my-server-1 --private-key $PK_PATH --public-key $PUB_KEY
+ssh-manager add --name my-server --private-key $PK_PATH --public-key $PUB_KEY_PATH --provider bw
+```
+
+For 1Password
+---
+
+```shell
+ssh-manager add --name my-another-server --private-key $PK_PATH --public-key $PUB_KEY_PATH --provider op
 ```
 
 ## Improvements to be made
 
 * 100% test coverage.
 * Better covering for other features.
-
