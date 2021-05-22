@@ -2,61 +2,73 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 
-	"github.com/omegion/bw-ssh/pkg/bw"
-	"github.com/omegion/bw-ssh/pkg/exec"
-	"github.com/omegion/bw-ssh/pkg/io"
+	"github.com/omegion/ssh-manager/internal/io"
+	"github.com/omegion/ssh-manager/internal/provider"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
-// setupAddCommand sets default flags.
+// setupGetCommand sets default flags.
 func setupGetCommand(cmd *cobra.Command) {
 	cmd.Flags().String("name", "", "Name")
 
 	if err := cmd.MarkFlagRequired("name"); err != nil {
 		log.Fatalf("Lethal damage: %s\n\n", err)
 	}
+
+	cmd.Flags().String("provider", "", "Provider")
+
+	if err := cmd.MarkFlagRequired("provider"); err != nil {
+		log.Fatalf("Lethal damage: %s\n\n", err)
+	}
+
+	cmd.Flags().Bool("read-only", false, "Do not write fetched SSH keys")
 }
 
-// Get acquires SSH key from Bitwarden.
+// Get acquires SSH key from given provider.
 func Get() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get",
-		Short: "Get SSH key from Bitwarden.",
+		Short: "Get SSH key from given provider.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, _ := cmd.Flags().GetString("name")
+			providerName, _ := cmd.Flags().GetString("provider")
+			readOnly, _ := cmd.Flags().GetBool("read-only")
 
-			bitwarden := bw.Bitwarden{
-				Commander: exec.Commander{},
-			}
+			commander := provider.NewCommander()
 
-			item, err := bitwarden.Get(name)
+			prv, err := decideProvider(&providerName, &commander)
 			if err != nil {
 				return err
 			}
 
-			if item.IsExists() {
-				for _, field := range item.Notes {
-					fileName := item.Name
-
-					if field.Name == "public_key" {
-						fileName = fmt.Sprintf("%s.pub", item.Name)
-					}
-
-					err := io.WriteSSHKey(fileName, []byte(field.Value))
-					if err != nil {
-						return err
-					}
-				}
-
-				fmt.Printf("SSH Key %s added.\n", name)
-
-				return nil
+			item, err := prv.Get(name)
+			if err != nil {
+				return err
 			}
 
-			fmt.Printf("Item %s not found\n", name)
+			log.Infoln(fmt.Sprintf("SSH Keys are fetched for %s.", name))
+
+			for _, field := range item.Values {
+				fileName := item.Name
+
+				if field.Name == "public_key" {
+					fileName = fmt.Sprintf("%s.pub", item.Name)
+				}
+
+				if readOnly {
+					fmt.Printf("%s:\n", field.Name)
+					fmt.Println(field.Value)
+					continue
+				}
+
+				err := io.WriteSSHKey(fileName, []byte(field.Value))
+				if err != nil {
+					return err
+				}
+			}
 
 			return nil
 		},
@@ -65,4 +77,15 @@ func Get() *cobra.Command {
 	setupGetCommand(cmd)
 
 	return cmd
+}
+
+func decideProvider(name *string, commander *provider.Commander) (provider.APIInterface, error) {
+	switch *name {
+	case provider.BitwardenCommand:
+		return provider.Bitwarden{Commander: *commander}, nil
+	case provider.OnePasswordCommand:
+		return provider.OnePassword{Commander: *commander}, nil
+	default:
+		return provider.Bitwarden{}, provider.NotFound{Name: name}
+	}
 }

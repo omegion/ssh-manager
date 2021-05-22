@@ -40,7 +40,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/omegion/bw-ssh:${{ steps.get_version.outputs.VERSION }}
+          tags: ghcr.io/omegion/ssh-manager:${{ steps.get_version.outputs.VERSION }}
 
       - name: Build Changelog
         id: github_release

@@ -3,11 +3,10 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 
-	"github.com/omegion/bw-ssh/pkg/bw"
-	"github.com/omegion/bw-ssh/pkg/exec"
+	"github.com/omegion/ssh-manager/internal/provider"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -30,17 +29,24 @@ func setupAddCommand(cmd *cobra.Command) {
 	if err := cmd.MarkFlagRequired("private-key"); err != nil {
 		log.Fatalf("Lethal damage: %s\n\n", err)
 	}
+
+	cmd.Flags().String("provider", "", "Provider")
+
+	if err := cmd.MarkFlagRequired("provider"); err != nil {
+		log.Fatalf("Lethal damage: %s\n\n", err)
+	}
 }
 
-// Add creates SSH key into Bitwarden.
+// Add creates SSH key into given provider.
 func Add() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "add",
-		Short: "Add SSH key to Bitwarden.",
+		Short: "Add SSH key to given provider.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, _ := cmd.Flags().GetString("name")
 			publicKeyFileName, _ := cmd.Flags().GetString("public-key")
 			privateKeyFileName, _ := cmd.Flags().GetString("private-key")
+			providerName, _ := cmd.Flags().GetString("provider")
 
 			publicKey, err := readFile(publicKeyFileName)
 			if err != nil {
@@ -52,10 +58,9 @@ func Add() *cobra.Command {
 				return err
 			}
 
-			item := bw.Item{
-				Type: 1,
+			item := provider.Item{
 				Name: name,
-				Notes: []bw.Field{
+				Values: []provider.Field{
 					{
 						Name:  "public_key",
 						Value: publicKey,
@@ -67,15 +72,19 @@ func Add() *cobra.Command {
 				},
 			}
 
-			bitwarden := bw.Bitwarden{
-				Commander: exec.Commander{},
-			}
-			err = bitwarden.Add(item)
+			commander := provider.NewCommander()
+
+			prv, err := decideProvider(&providerName, &commander)
 			if err != nil {
 				return err
 			}
 
-			fmt.Print("Key saved.\n", name)
+			err = prv.Add(&item)
+			if err != nil {
+				return err
+			}
+
+			log.Infoln(fmt.Sprintf("SSH Keys saved for %s.", name))
 
 			return nil
 		},
