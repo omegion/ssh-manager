@@ -200,8 +200,7 @@ func (b Bitwarden) Sync() error {
 
 	command.SetStderr(&stderr)
 
-	_, err := command.Output()
-	if err != nil {
+	if _, err := command.Output(); err != nil {
 		return ExecutionFailedError{Command: "bw sync", Message: stderr.String()}
 	}
 

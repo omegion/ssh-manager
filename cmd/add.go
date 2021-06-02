@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 
 	"github.com/omegion/ssh-manager/internal/provider"
-
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

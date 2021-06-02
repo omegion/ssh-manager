@@ -5,7 +5,6 @@ import (
 
 	"github.com/omegion/ssh-manager/internal/io"
 	"github.com/omegion/ssh-manager/internal/provider"
-
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -59,8 +58,8 @@ func Get() *cobra.Command {
 				}
 
 				if readOnly {
-					fmt.Printf("%s:\n", field.Name)
-					fmt.Println(field.Value)
+					log.Infoln(fmt.Sprintf("%s\n%s", field.Name, field.Value))
+
 					continue
 				}
 

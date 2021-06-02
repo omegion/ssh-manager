@@ -1,10 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/omegion/ssh-manager/internal/provider"
-
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -41,7 +38,7 @@ func List() *cobra.Command {
 			log.Infoln("SSH Keys are fetched.")
 
 			for _, item := range items {
-				fmt.Println(item.Name)
+				log.Infoln(item.Name)
 			}
 
 			return nil

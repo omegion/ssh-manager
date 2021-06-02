@@ -5,7 +5,6 @@ import (
 	"context"
 
 	"github.com/omegion/ssh-manager/internal/provider"
-
 	log "github.com/sirupsen/logrus"
 )
 
@@ -23,8 +22,7 @@ func Add(path string) error {
 
 	command.SetStderr(&stderr)
 
-	_, err := command.Output()
-	if err != nil {
+	if _, err := command.Output(); err != nil {
 		return provider.ExecutionFailedError{Command: "ssh-add", Message: stderr.String()}
 	}
 

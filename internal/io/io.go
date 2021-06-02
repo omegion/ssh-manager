@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/omegion/ssh-manager/internal/ssh"
-
 	log "github.com/sirupsen/logrus"
 )
 
