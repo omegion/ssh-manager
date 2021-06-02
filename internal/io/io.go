@@ -8,11 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/omegion/ssh-manager/internal"
-
 	log "github.com/sirupsen/logrus"
 
 	"github.com/omegion/ssh-manager/internal"
+	"github.com/omegion/ssh-manager/internal/ssh"
 )
 
 // WriteSSHKey creates file with given data and filename.

@@ -9,6 +9,8 @@ import (
 	"strings"
 
 	log "github.com/sirupsen/logrus"
+
+	"github.com/omegion/ssh-manager/internal"
 )
 
 const (

@@ -5,8 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/omegion/ssh-manager/internal"
-
 	"github.com/stretchr/testify/assert"
 
 	"github.com/omegion/ssh-manager/internal"

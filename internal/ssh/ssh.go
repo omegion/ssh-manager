@@ -7,6 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/omegion/ssh-manager/internal"
+	"github.com/omegion/ssh-manager/internal/provider"
 )
 
 // Add adds SSH key to the local agent.

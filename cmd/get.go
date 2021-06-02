@@ -7,6 +7,8 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/omegion/ssh-manager/internal"
+	"github.com/omegion/ssh-manager/internal/io"
+	"github.com/omegion/ssh-manager/internal/provider"
 )
 
 // setupGetCommand sets default flags.
