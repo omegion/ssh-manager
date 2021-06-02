@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/omegion/ssh-manager/internal/provider"
-
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+
+	"github.com/omegion/ssh-manager/internal"
+	"github.com/omegion/ssh-manager/internal/provider"
 )
 
 // setupAddCommand sets default flags.
@@ -72,7 +73,7 @@ func Add() *cobra.Command {
 				},
 			}
 
-			commander := provider.NewCommander()
+			commander := internal.NewCommander()
 
 			prv, err := decideProvider(&providerName, &commander)
 			if err != nil {

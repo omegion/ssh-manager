@@ -1,13 +1,11 @@
-package test_test
+package test
 
 import (
 	"testing"
-
-	"github.com/omegion/ssh-manager/test"
 )
 
 func TestLoadFixture_found(t *testing.T) {
-	data, err := test.LoadFixture("data")
+	data, err := LoadFixture("data")
 	if err != nil {
 		t.Errorf("TestLoadFixture_found should find the 'data' file")
 	}
@@ -19,7 +17,7 @@ func TestLoadFixture_found(t *testing.T) {
 }
 
 func TestLoadFixture_notFound(t *testing.T) {
-	data, err := test.LoadFixture("nodata")
+	data, err := LoadFixture("nodata")
 	if err == nil {
 		t.Errorf("TestLoadFixture_notFound should not find the 'nodata' file")
 	}
@@ -34,7 +32,7 @@ func TestMust_noError(t *testing.T) {
 	input := []byte("Yey")
 	expected := "Yey"
 
-	output := test.Must(input, nil)
+	output := Must(input, nil)
 	if string(output) != expected {
 		t.Errorf("Must() = %v, want %v", output, expected)
 	}
@@ -47,5 +45,5 @@ func TestMust_hasError(t *testing.T) {
 		}
 	}()
 
-	_ = test.Must([]byte{}, test.FixtureFileNotFound{Path: "/path", Name: "file"})
+	_ = Must([]byte{}, FixtureFileNotFound{Path: "/path", Name: "file"})
 }

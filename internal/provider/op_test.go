@@ -5,10 +5,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
+	"github.com/omegion/ssh-manager/internal"
 	"github.com/omegion/ssh-manager/internal/provider"
 	"github.com/omegion/ssh-manager/test"
-
-	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -16,7 +17,11 @@ const (
 )
 
 func TestOnePassword_Add(t *testing.T) {
-	e := test.NewExecutor([]test.CommandWithOutput{
+	expectedCommands := []test.FakeCommand{
+		{
+			Command: fmt.Sprintf("op get item %s%s", provider.BitwardenDefaultPrefix, "test"),
+			StdErr:  test.Must(test.LoadFixture("op_get.txt")),
+		},
 		{
 			Command: fmt.Sprintf(
 				"op create item login notesPlain=%s --title %s%s --tags %s",
@@ -25,17 +30,12 @@ func TestOnePassword_Add(t *testing.T) {
 				"test",
 				strings.Replace(provider.OnePasswordDefaultPrefix, "__", "", 1),
 			),
-			StdOut:                test.Must(test.LoadFixture("op_add.txt")),
-			StdErr:                []byte{},
-			ExpectedNumberOfCalls: 1,
+			StdOut: test.Must(test.LoadFixture("op_add.txt")),
 		},
-	})
-
-	commander := provider.NewCommander()
-	commander.Executor = e
+	}
 
 	op := provider.OnePassword{
-		Commander: commander,
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	item := provider.Item{
@@ -55,75 +55,57 @@ func TestOnePassword_Add(t *testing.T) {
 	err := op.Add(&item)
 
 	assert.NoError(t, err)
-	assert.NoError(t, e.Validate())
 }
 
 func TestOnePassword_Get(t *testing.T) {
-	e := test.NewExecutor([]test.CommandWithOutput{
+	expectedCommands := []test.FakeCommand{
 		{
-			Command:               fmt.Sprintf("op get item %s%s", provider.BitwardenDefaultPrefix, "test"),
-			StdOut:                test.Must(test.LoadFixture("op_get.txt")),
-			StdErr:                []byte{},
-			ExpectedNumberOfCalls: 1,
+			Command: fmt.Sprintf("op get item %s%s", provider.BitwardenDefaultPrefix, "test"),
+			StdOut:  test.Must(test.LoadFixture("op_get.txt")),
 		},
-	})
-
-	commander := provider.NewCommander()
-	commander.Executor = e
+	}
 
 	op := provider.OnePassword{
-		Commander: commander,
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	item, err := op.Get("test")
 
 	assert.NoError(t, err)
-	assert.NoError(t, e.Validate())
 	assert.Equal(t, "test", item.Name)
 	assert.Equal(t, "X", item.ID)
 }
 
 func TestOnePassword_GetNotFound(t *testing.T) {
-	e := test.NewExecutor([]test.CommandWithOutput{
+	expectedCommands := []test.FakeCommand{
 		{
-			Command:               fmt.Sprintf("op get item %s%s", provider.BitwardenDefaultPrefix, "test"),
-			StdOut:                []byte{},
-			StdErr:                test.Must(test.LoadFixture("op_get_not_found.txt")),
-			ExpectedNumberOfCalls: 1,
+			Command: fmt.Sprintf("op get item %s%s", provider.BitwardenDefaultPrefix, "test"),
+			StdErr:  test.Must(test.LoadFixture("op_get_not_found.txt")),
 		},
-	})
-
-	commander := provider.NewCommander()
-	commander.Executor = e
+	}
 
 	op := provider.OnePassword{
-		Commander: commander,
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	_, err := op.Get("test")
 
 	assert.Error(t, err)
-	assert.NoError(t, e.Validate())
 }
 
 func TestOnePassword_List(t *testing.T) {
-	e := test.NewExecutor([]test.CommandWithOutput{
+	expectedCommands := []test.FakeCommand{
 		{
 			Command: fmt.Sprintf(
 				"op list items --categories login --tags %s",
 				strings.Replace(provider.OnePasswordDefaultPrefix, "__", "", 1),
 			),
-			StdOut:                test.Must(test.LoadFixture("op_list.txt")),
-			StdErr:                []byte{},
-			ExpectedNumberOfCalls: 1,
+			StdOut: test.Must(test.LoadFixture("op_list.txt")),
 		},
-	})
-
-	commander := provider.NewCommander()
-	commander.Executor = e
+	}
 
 	op := provider.OnePassword{
-		Commander: commander,
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	items, err := op.List()
@@ -134,7 +116,6 @@ func TestOnePassword_List(t *testing.T) {
 	}
 
 	assert.NoError(t, err)
-	assert.NoError(t, e.Validate())
 
 	for _, item := range items {
 		assert.Equal(t, expectedItems[item.ID], item.Name)

@@ -1,12 +1,10 @@
 package cmd
 
 import (
-	"fmt"
-
-	"github.com/omegion/ssh-manager/internal/provider"
-
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+
+	"github.com/omegion/ssh-manager/internal"
 )
 
 // setupListCommand sets default flags.
@@ -26,7 +24,7 @@ func List() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			providerName, _ := cmd.Flags().GetString("provider")
 
-			commander := provider.NewCommander()
+			commander := internal.NewCommander()
 
 			prv, err := decideProvider(&providerName, &commander)
 			if err != nil {
@@ -41,7 +39,7 @@ func List() *cobra.Command {
 			log.Infoln("SSH Keys are fetched.")
 
 			for _, item := range items {
-				fmt.Println(item.Name)
+				log.Infoln(item.Name)
 			}
 
 			return nil

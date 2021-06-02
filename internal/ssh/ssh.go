@@ -4,15 +4,14 @@ import (
 	"bytes"
 	"context"
 
-	"github.com/omegion/ssh-manager/internal/provider"
-
 	log "github.com/sirupsen/logrus"
+
+	"github.com/omegion/ssh-manager/internal"
+	"github.com/omegion/ssh-manager/internal/provider"
 )
 
 // Add adds SSH key to the local agent.
-func Add(path string) error {
-	commander := provider.NewCommander()
-
+func Add(path string, commander internal.Commander) error {
 	command := commander.Executor.CommandContext(
 		context.Background(),
 		"ssh-add",
@@ -23,8 +22,7 @@ func Add(path string) error {
 
 	command.SetStderr(&stderr)
 
-	_, err := command.Output()
-	if err != nil {
+	if _, err := command.Output(); err != nil {
 		return provider.ExecutionFailedError{Command: "ssh-add", Message: stderr.String()}
 	}
 
