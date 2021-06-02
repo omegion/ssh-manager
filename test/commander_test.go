@@ -3,8 +3,11 @@ package test
 import (
 	"testing"
 
-	"github.com/omegion/ssh-manager/internal/provider"
+	"github.com/omegion/ssh-manager/internal"
+
 	"github.com/stretchr/testify/assert"
+
+	"github.com/omegion/ssh-manager/internal"
 )
 
 func TestNewExecutor(t *testing.T) {
@@ -18,7 +21,7 @@ func TestNewExecutor(t *testing.T) {
 
 	commands = append(commands, command)
 
-	commander := provider.Commander{Executor: NewExecutor(commands)}
+	commander := internal.Commander{Executor: NewExecutor(commands)}
 	cmd := commander.Executor.Command("cat")
 
 	output, err := cmd.Output()
@@ -37,7 +40,7 @@ func TestNewExecutor_Failure(t *testing.T) {
 
 	commands = append(commands, command)
 
-	commander := provider.Commander{Executor: NewExecutor(commands)}
+	commander := internal.Commander{Executor: NewExecutor(commands)}
 	cmd := commander.Executor.Command("cat")
 
 	_, err := cmd.Output()

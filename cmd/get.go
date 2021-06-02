@@ -3,10 +3,10 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/omegion/ssh-manager/internal/io"
-	"github.com/omegion/ssh-manager/internal/provider"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+
+	"github.com/omegion/ssh-manager/internal"
 )
 
 // setupGetCommand sets default flags.
@@ -36,7 +36,7 @@ func Get() *cobra.Command {
 			providerName, _ := cmd.Flags().GetString("provider")
 			readOnly, _ := cmd.Flags().GetBool("read-only")
 
-			commander := provider.NewCommander()
+			commander := internal.NewCommander()
 
 			prv, err := decideProvider(&providerName, &commander)
 			if err != nil {
@@ -78,7 +78,7 @@ func Get() *cobra.Command {
 	return cmd
 }
 
-func decideProvider(name *string, commander *provider.Commander) (provider.APIInterface, error) {
+func decideProvider(name *string, commander *internal.Commander) (provider.APIInterface, error) {
 	switch *name {
 	case provider.BitwardenCommand:
 		return provider.Bitwarden{Commander: *commander}, nil

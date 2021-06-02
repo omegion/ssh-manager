@@ -8,8 +8,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/omegion/ssh-manager/internal/ssh"
+	"github.com/omegion/ssh-manager/internal"
+
 	log "github.com/sirupsen/logrus"
+
+	"github.com/omegion/ssh-manager/internal"
 )
 
 // WriteSSHKey creates file with given data and filename.
@@ -40,7 +43,7 @@ func WriteSSHKey(fileName string, data []byte) error {
 	}
 
 	if !strings.Contains(sshPath, ".pub") {
-		err = ssh.Add(sshPath)
+		err = ssh.Add(sshPath, internal.NewCommander())
 		if err != nil {
 			return err
 		}

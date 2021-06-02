@@ -20,7 +20,7 @@ const (
 
 // Bitwarden for connection.
 type Bitwarden struct {
-	Commander Commander
+	Commander internal.Commander
 }
 
 // BitwardenItem is item adapter for provider Item.

@@ -8,7 +8,11 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/omegion/ssh-manager/internal"
+
 	log "github.com/sirupsen/logrus"
+
+	"github.com/omegion/ssh-manager/internal"
 )
 
 const (
@@ -21,7 +25,7 @@ const (
 
 // OnePassword for connection.
 type OnePassword struct {
-	Commander Commander
+	Commander internal.Commander
 }
 
 // OnePasswordItemOverview is item adapter for provider OnePasswordItem.

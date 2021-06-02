@@ -5,9 +5,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/omegion/ssh-manager/internal"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/omegion/ssh-manager/internal"
 	"github.com/omegion/ssh-manager/internal/provider"
 	"github.com/omegion/ssh-manager/test"
-	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -33,7 +37,7 @@ func TestOnePassword_Add(t *testing.T) {
 	}
 
 	op := provider.OnePassword{
-		Commander: provider.Commander{Executor: test.NewExecutor(expectedCommands)},
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	item := provider.Item{
@@ -64,7 +68,7 @@ func TestOnePassword_Get(t *testing.T) {
 	}
 
 	op := provider.OnePassword{
-		Commander: provider.Commander{Executor: test.NewExecutor(expectedCommands)},
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	item, err := op.Get("test")
@@ -83,7 +87,7 @@ func TestOnePassword_GetNotFound(t *testing.T) {
 	}
 
 	op := provider.OnePassword{
-		Commander: provider.Commander{Executor: test.NewExecutor(expectedCommands)},
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	_, err := op.Get("test")
@@ -103,7 +107,7 @@ func TestOnePassword_List(t *testing.T) {
 	}
 
 	op := provider.OnePassword{
-		Commander: provider.Commander{Executor: test.NewExecutor(expectedCommands)},
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	items, err := op.List()

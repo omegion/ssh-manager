@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
+	"github.com/omegion/ssh-manager/internal"
 	"github.com/omegion/ssh-manager/internal/provider"
 	"github.com/omegion/ssh-manager/test"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestBitwarden_Add(t *testing.T) {
@@ -25,7 +27,7 @@ func TestBitwarden_Add(t *testing.T) {
 	}
 
 	bw := provider.Bitwarden{
-		Commander: provider.Commander{Executor: test.NewExecutor(expectedCommands)},
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	item := provider.Item{
@@ -59,7 +61,7 @@ func TestBitwarden_Get(t *testing.T) {
 	}
 
 	bw := provider.Bitwarden{
-		Commander: provider.Commander{Executor: test.NewExecutor(expectedCommands)},
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	item, err := bw.Get("test")
@@ -80,7 +82,7 @@ func TestBitwarden_GetNotFound(t *testing.T) {
 	}
 
 	bw := provider.Bitwarden{
-		Commander: provider.Commander{Executor: test.NewExecutor(expectedCommands)},
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	_, err := bw.Get("test")
@@ -96,7 +98,7 @@ func TestBitwarden_Sync(t *testing.T) {
 	}
 
 	bw := provider.Bitwarden{
-		Commander: provider.Commander{Executor: test.NewExecutor(expectedCommands)},
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	err := bw.Sync()
@@ -116,7 +118,7 @@ func TestBitwarden_List(t *testing.T) {
 	}
 
 	bw := provider.Bitwarden{
-		Commander: provider.Commander{Executor: test.NewExecutor(expectedCommands)},
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
 	items, err := bw.List()

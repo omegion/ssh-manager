@@ -3,9 +3,10 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/omegion/ssh-manager/internal/info"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+
+	"github.com/omegion/ssh-manager/internal/info"
 )
 
 // Version prints version/build.
