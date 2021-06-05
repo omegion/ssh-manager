@@ -7,7 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/omegion/ssh-manager/internal"
+	"github.com/omegion/ssh-manager/internal/controller"
 	"github.com/omegion/ssh-manager/internal/provider"
 )
 
@@ -38,11 +38,11 @@ func setupAddCommand(cmd *cobra.Command) {
 	}
 }
 
-// Add creates SSH key into given provider.
+// Add creates Manager key into given provider.
 func Add() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "add",
-		Short: "Add SSH key to given provider.",
+		Short: "Add Manager key to given provider.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, _ := cmd.Flags().GetString("name")
 			publicKeyFileName, _ := cmd.Flags().GetString("public-key")
@@ -73,19 +73,12 @@ func Add() *cobra.Command {
 				},
 			}
 
-			commander := internal.NewCommander()
-
-			prv, err := decideProvider(&providerName, &commander)
+			err = controller.NewManager(&providerName).Add(&item)
 			if err != nil {
 				return err
 			}
 
-			err = prv.Add(&item)
-			if err != nil {
-				return err
-			}
-
-			log.Infoln(fmt.Sprintf("SSH Keys saved for %s.", name))
+			log.Infoln(fmt.Sprintf("Manager Keys saved for %s.", name))
 
 			return nil
 		},

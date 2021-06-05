@@ -6,9 +6,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/omegion/ssh-manager/internal"
+	"github.com/omegion/ssh-manager/internal/controller"
 	"github.com/omegion/ssh-manager/internal/io"
-	"github.com/omegion/ssh-manager/internal/provider"
 )
 
 // setupGetCommand sets default flags.
@@ -25,32 +24,25 @@ func setupGetCommand(cmd *cobra.Command) {
 		log.Fatalf("Lethal damage: %s\n\n", err)
 	}
 
-	cmd.Flags().Bool("read-only", false, "Do not write fetched SSH keys")
+	cmd.Flags().Bool("read-only", false, "Do not write fetched Manager keys")
 }
 
-// Get acquires SSH key from given provider.
+// Get acquires Manager key from given provider.
 func Get() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get",
-		Short: "Get SSH key from given provider.",
+		Short: "Get Manager key from given provider.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, _ := cmd.Flags().GetString("name")
 			providerName, _ := cmd.Flags().GetString("provider")
 			readOnly, _ := cmd.Flags().GetBool("read-only")
 
-			commander := internal.NewCommander()
-
-			prv, err := decideProvider(&providerName, &commander)
+			item, err := controller.NewManager(&providerName).Get(name)
 			if err != nil {
 				return err
 			}
 
-			item, err := prv.Get(name)
-			if err != nil {
-				return err
-			}
-
-			log.Infoln(fmt.Sprintf("SSH Keys are fetched for %s.", name))
+			log.Infoln(fmt.Sprintf("Manager Keys are fetched for %s.", name))
 
 			for _, field := range item.Values {
 				fileName := item.Name
@@ -78,15 +70,4 @@ func Get() *cobra.Command {
 	setupGetCommand(cmd)
 
 	return cmd
-}
-
-func decideProvider(name *string, commander *internal.Commander) (provider.APIInterface, error) {
-	switch *name {
-	case provider.BitwardenCommand:
-		return provider.Bitwarden{Commander: *commander}, nil
-	case provider.OnePasswordCommand:
-		return provider.OnePassword{Commander: *commander}, nil
-	default:
-		return provider.Bitwarden{}, provider.NotFound{Name: name}
-	}
 }

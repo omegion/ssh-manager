@@ -5,11 +5,14 @@ import (
 	"encoding/json"
 )
 
-// APIInterface is an interface for all providers.
-type APIInterface interface {
+//nolint:lll // go generate is ugly.
+//go:generate mockgen -destination=mocks/interface_mock.go -package=mocks github.com/omegion/ssh-manager/internal/provider Interface
+// Interface is an interface for all providers.
+type Interface interface {
+	GetName() string
 	Add(item *Item) error
-	Get(name string) (Item, error)
-	List() ([]Item, error)
+	Get(name string) (*Item, error)
+	List() ([]*Item, error)
 }
 
 // Field is custom fields under Item.

@@ -43,6 +43,11 @@ type OnePasswordItem struct {
 	Overview OnePasswordItemOverview `json:"overview"`
 }
 
+// GetName returns name of the provider.
+func (o OnePassword) GetName() string {
+	return OnePasswordCommand
+}
+
 // Add adds given item to OnePassword.
 func (o OnePassword) Add(item *Item) error {
 	_, err := o.Get(item.Name)
@@ -81,7 +86,7 @@ func (o OnePassword) Add(item *Item) error {
 }
 
 // Get gets Item from OnePassword with given item name.
-func (o OnePassword) Get(name string) (Item, error) {
+func (o OnePassword) Get(name string) (*Item, error) {
 	command := o.Commander.Executor.CommandContext(
 		context.Background(),
 		OnePasswordCommand,
@@ -98,14 +103,14 @@ func (o OnePassword) Get(name string) (Item, error) {
 
 	output, err := command.Output()
 	if err != nil {
-		return Item{}, ExecutionFailedError{Command: "op get item", Message: stderr.String()}
+		return &Item{}, ExecutionFailedError{Command: "op get item", Message: stderr.String()}
 	}
 
 	var opItem OnePasswordItem
 
 	err = json.Unmarshal(output, &opItem)
 	if err != nil {
-		return Item{}, err
+		return &Item{}, err
 	}
 
 	item := Item{
@@ -117,19 +122,19 @@ func (o OnePassword) Get(name string) (Item, error) {
 
 	decodedRawNotes, err := base64.StdEncoding.DecodeString(*opItem.Details.NotesPlain)
 	if err != nil {
-		return Item{}, err
+		return &Item{}, err
 	}
 
 	err = json.Unmarshal(decodedRawNotes, &item.Values)
 	if err != nil {
-		return Item{}, err
+		return &Item{}, err
 	}
 
-	return item, nil
+	return &item, nil
 }
 
 // List lists all added SSH keys.
-func (o OnePassword) List() ([]Item, error) {
+func (o OnePassword) List() ([]*Item, error) {
 	command := o.Commander.Executor.CommandContext(
 		context.Background(),
 		OnePasswordCommand,
@@ -149,20 +154,20 @@ func (o OnePassword) List() ([]Item, error) {
 
 	output, err := command.Output()
 	if err != nil {
-		return []Item{}, ExecutionFailedError{Command: "op list", Message: stderr.String()}
+		return []*Item{}, ExecutionFailedError{Command: "op list", Message: stderr.String()}
 	}
 
 	var opItems []OnePasswordItem
 
 	err = json.Unmarshal(output, &opItems)
 	if err != nil {
-		return []Item{}, err
+		return []*Item{}, err
 	}
 
-	items := make([]Item, 0)
+	items := make([]*Item, 0)
 
 	for _, item := range opItems {
-		items = append(items, Item{
+		items = append(items, &Item{
 			ID:   *item.UUID,
 			Name: strings.Replace(*item.Overview.Title, OnePasswordDefaultPrefix, "", 1),
 		})

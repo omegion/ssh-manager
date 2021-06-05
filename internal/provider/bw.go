@@ -34,6 +34,11 @@ type BitwardenItem struct {
 	Login string  `json:"login"`
 }
 
+// GetName returns name of the provider.
+func (b Bitwarden) GetName() string {
+	return BitwardenCommand
+}
+
 // Add adds given item to Bitwarden.
 func (b Bitwarden) Add(item *Item) error {
 	_, err := b.Get(item.Name)
@@ -82,10 +87,10 @@ func (b Bitwarden) Add(item *Item) error {
 }
 
 // Get gets Item from Bitwarden with given item name.
-func (b Bitwarden) Get(name string) (Item, error) {
+func (b Bitwarden) Get(name string) (*Item, error) {
 	err := b.Sync()
 	if err != nil {
-		return Item{}, err
+		return &Item{}, err
 	}
 
 	command := b.Commander.Executor.CommandContext(
@@ -104,7 +109,7 @@ func (b Bitwarden) Get(name string) (Item, error) {
 
 	output, err := command.Output()
 	if err != nil {
-		return Item{}, ExecutionFailedError{Command: "bw get", Message: stderr.String()}
+		return &Item{}, ExecutionFailedError{Command: "bw get", Message: stderr.String()}
 	}
 
 	var tmpItem struct {
@@ -115,7 +120,7 @@ func (b Bitwarden) Get(name string) (Item, error) {
 
 	err = json.Unmarshal(output, &tmpItem)
 	if err != nil {
-		return Item{}, err
+		return &Item{}, err
 	}
 
 	item := Item{
@@ -127,22 +132,22 @@ func (b Bitwarden) Get(name string) (Item, error) {
 
 	decodedRawNotes, err := base64.StdEncoding.DecodeString(tmpItem.Notes)
 	if err != nil {
-		return Item{}, err
+		return &Item{}, err
 	}
 
 	err = json.Unmarshal(decodedRawNotes, &item.Values)
 	if err != nil {
-		return Item{}, err
+		return &Item{}, err
 	}
 
-	return item, nil
+	return &item, nil
 }
 
 // List lists all added SSH keys.
-func (b Bitwarden) List() ([]Item, error) {
+func (b Bitwarden) List() ([]*Item, error) {
 	err := b.Sync()
 	if err != nil {
-		return []Item{}, err
+		return []*Item{}, err
 	}
 
 	command := b.Commander.Executor.CommandContext(
@@ -162,7 +167,7 @@ func (b Bitwarden) List() ([]Item, error) {
 
 	output, err := command.Output()
 	if err != nil {
-		return []Item{}, ExecutionFailedError{Command: "bw get", Message: stderr.String()}
+		return []*Item{}, ExecutionFailedError{Command: "bw get", Message: stderr.String()}
 	}
 
 	type tmpItem struct {
@@ -175,13 +180,13 @@ func (b Bitwarden) List() ([]Item, error) {
 
 	err = json.Unmarshal(output, &tmpItems)
 	if err != nil {
-		return []Item{}, err
+		return []*Item{}, err
 	}
 
-	items := make([]Item, 0)
+	items := make([]*Item, 0)
 
 	for _, item := range tmpItems {
-		items = append(items, Item{
+		items = append(items, &Item{
 			ID:   *item.ID,
 			Name: strings.Replace(item.Name, BitwardenDefaultPrefix, "", 1),
 		})
