@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
 	"os"
 
 	commander "github.com/omegion/cobra-commander"
+	"github.com/spf13/cobra"
 
 	"github.com/omegion/ssh-manager/cmd"
 )
