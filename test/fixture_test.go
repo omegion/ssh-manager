@@ -1,41 +1,30 @@
 package test
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestLoadFixture_found(t *testing.T) {
 	data, err := LoadFixture("data")
-	if err != nil {
-		t.Errorf("TestLoadFixture_found should find the 'data' file")
-	}
 
-	expected := "yey\n"
-	if string(data) != expected {
-		t.Errorf("Expected file content: %s, got: %s", expected, data)
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, "yey\n", string(data))
 }
 
 func TestLoadFixture_notFound(t *testing.T) {
 	data, err := LoadFixture("nodata")
-	if err == nil {
-		t.Errorf("TestLoadFixture_notFound should not find the 'nodata' file")
-	}
 
-	expected := ""
-	if string(data) != expected {
-		t.Errorf("Expected file content: %s, got: %s", expected, data)
-	}
+	assert.Error(t, err)
+	assert.Equal(t, "", string(data))
 }
 
 func TestMust_noError(t *testing.T) {
 	input := []byte("Yey")
-	expected := "Yey"
 
 	output := Must(input, nil)
-	if string(output) != expected {
-		t.Errorf("Must() = %v, want %v", output, expected)
-	}
+
+	assert.Equal(t, "Yey", string(output))
 }
 
 func TestMust_hasError(t *testing.T) {
