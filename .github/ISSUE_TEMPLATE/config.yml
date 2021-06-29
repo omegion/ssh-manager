@@ -1,0 +1,4 @@
+contact_links:
+  - name: Ask a question
+    url: https://github.com/omegion/ssh-manager/discussions/new
+    about: For increased visibility, please post questions on the discussions.
