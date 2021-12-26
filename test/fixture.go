@@ -12,7 +12,7 @@ func LoadFixture(name string) ([]byte, error) {
 	if err != nil {
 		path, _ := os.Getwd()
 
-		return []byte{}, FixtureFileNotFound{Path: path, Name: name}
+		return []byte{}, FixtureFileNotFoundError{Path: path, Name: name}
 	}
 
 	return content, nil

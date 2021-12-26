@@ -52,7 +52,7 @@ func (o OnePassword) GetName() string {
 func (o OnePassword) Add(item *Item) error {
 	_, err := o.Get(item.Name)
 	if err == nil {
-		return ItemAlreadyExists{Name: item.Name}
+		return ItemAlreadyExistsError{Name: item.Name}
 	}
 
 	encodedValues, err := item.EncodeValues()

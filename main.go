@@ -17,7 +17,7 @@ func main() {
 		SilenceUsage: true,
 	}
 
-	c := commander.NewCommander(root).
+	comm := commander.NewCommander(root).
 		SetCommand(
 			cmd.Version(),
 			cmd.Get(),
@@ -26,7 +26,7 @@ func main() {
 		).
 		Init()
 
-	if err := c.Execute(); err != nil {
+	if err := comm.Execute(); err != nil {
 		os.Exit(1)
 	}
 }

@@ -27,7 +27,7 @@ func WriteSSHKey(fileName string, data []byte) error {
 
 	if _, err = os.Stat(sshDirectory); os.IsNotExist(err) {
 		//nolint:gomnd // change this later.
-		err = os.Mkdir(sshDirectory, os.FileMode(0777))
+		err = os.Mkdir(sshDirectory, os.FileMode(0o777))
 		if err != nil {
 			return err
 		}
@@ -36,7 +36,7 @@ func WriteSSHKey(fileName string, data []byte) error {
 	sshPath := filepath.Join(sshDirectory, fileName)
 
 	//nolint:gomnd // change this later.
-	err = ioutil.WriteFile(sshPath, data, os.FileMode(0600))
+	err = ioutil.WriteFile(sshPath, data, os.FileMode(0o600))
 	if err != nil {
 		return err
 	}
