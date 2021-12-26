@@ -34,7 +34,7 @@ func TestOnePassword_Add(t *testing.T) {
 		},
 	}
 
-	op := provider.OnePassword{
+	onep := provider.OnePassword{
 		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
@@ -52,7 +52,7 @@ func TestOnePassword_Add(t *testing.T) {
 		},
 	}
 
-	err := op.Add(&item)
+	err := onep.Add(&item)
 
 	assert.NoError(t, err)
 }

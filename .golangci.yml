@@ -41,3 +41,4 @@ linters:
   disable:
     - exhaustivestruct
     - wrapcheck
+    - ireturn

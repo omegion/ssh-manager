@@ -43,7 +43,7 @@ func (b Bitwarden) GetName() string {
 func (b Bitwarden) Add(item *Item) error {
 	_, err := b.Get(item.Name)
 	if err == nil {
-		return ItemAlreadyExists{Name: item.Name}
+		return ItemAlreadyExistsError{Name: item.Name}
 	}
 
 	encodedValues, err := item.EncodeValues()

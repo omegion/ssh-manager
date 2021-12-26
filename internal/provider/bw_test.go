@@ -26,7 +26,7 @@ func TestBitwarden_Add(t *testing.T) {
 		},
 	}
 
-	bw := provider.Bitwarden{
+	bitw := provider.Bitwarden{
 		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
@@ -44,7 +44,7 @@ func TestBitwarden_Add(t *testing.T) {
 		},
 	}
 
-	err := bw.Add(&item)
+	err := bitw.Add(&item)
 
 	assert.NoError(t, err)
 }

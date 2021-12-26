@@ -35,5 +35,5 @@ func TestMust_hasError(t *testing.T) {
 		}
 	}()
 
-	_ = Must([]byte{}, FixtureFileNotFound{Path: "/path", Name: "file"})
+	_ = Must([]byte{}, FixtureFileNotFoundError{Path: "/path", Name: "file"})
 }
