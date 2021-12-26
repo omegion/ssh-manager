@@ -11,7 +11,7 @@ jobs:
       - name: Set up Go 1.x
         uses: actions/setup-go@v2
         with:
-          go-version: ^1.16
+          go-version: ^1.17
         id: go
 
       - name: Checkout code
@@ -65,4 +65,4 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.37.0
+          version: v1.43.0
