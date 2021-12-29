@@ -59,3 +59,60 @@ jobs:
             ${{steps.github_release.outputs.changelog}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    name: Create Release
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
+        # List of GOOS and GOARCH pairs from `go tool dist list`
+        goosarch:
+          - 'darwin/amd64'
+          - 'darwin/arm64'
+          - 'linux/amd64'
+          - 'linux/arm64'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Get the version
+        run: |
+          VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.17'
+      - name: Get OS and arch info
+        run: |
+          GOOSARCH=${{matrix.goosarch}}
+          GOOS=${GOOSARCH%/*}
+          GOARCH=${GOOSARCH#*/}
+          BINARY_NAME=ssh-manager-$GOOS-$GOARCH
+          VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
+          echo "BINARY_NAME=$BINARY_NAME" >> $GITHUB_ENV
+          echo "GOOS=$GOOS" >> $GITHUB_ENV
+          echo "GOARCH=$GOARCH" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Build
+        run: |
+          make build TARGETOS="$GOOS" TARGETARCH="$GOARCH" VERSION="$VERSION" BINARY_NAME="$BINARY_NAME"
+      - name: Release Notes
+        run: |
+          export VERSION=${{env.VERSION}}
+
+          git log $(git describe HEAD~ --tags --abbrev=0)..HEAD --pretty='format:* %h %s%n  * %an <%ae>' --no-merges >> .github/RELEASE_TEMPLATE.md
+          
+          curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v3.10.0/gomplate_linux-amd64
+          chmod 755 /usr/local/bin/gomplate
+          
+          gomplate --file .github/RELEASE_TEMPLATE.md --out .github/RELEASE_NOTES.md
+      - name: Release with Notes
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{env.VERSION}}
+          body_path: ".github/RELEASE_NOTES.md"
+          draft: false
+          files: ${{env.BINARY_NAME}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -11,9 +11,9 @@ import (
 
 func main() {
 	root := &cobra.Command{
-		Use:          "vault-unseal",
-		Short:        "Vault Auto Unseal",
-		Long:         "CLI command to automatically unseal Vault",
+		Use:          "ssh-manager",
+		Short:        "SSH Manager for your keys",
+		Long:         "SSH Manager for your keys on 1Password and Bitwarden",
 		SilenceUsage: true,
 	}
 

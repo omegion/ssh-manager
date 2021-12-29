@@ -11,13 +11,13 @@ LDFLAGS            = -ldflags "-X $(BASE_PACKAGE_NAME)/internal/info.Version=$(G
 BUFFER            := $(shell mktemp)
 REPORT_DIR         = dist/report
 COVER_PROFILE      = $(REPORT_DIR)/coverage.out
+TARGETOS		   = darwin
+TARGETARCH		   = amd64
+BINARY_NAME        = dist/ssh-manager
 
 .PHONY: build
 build:
-	CGO_ENABLED=0 go build $(LDFLAGS) -installsuffix cgo -o dist/ssh-manager main.go
-
-build-for-container:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -a -installsuffix cgo -o dist/ssh-manager-linux main.go
+	CGO_ENABLED=0 GOOS="$(TARGETOS)" GOARCH="$(TARGETARCH)" go build $(LDFLAGS) -a -installsuffix cgo -o $(BINARY_NAME) main.go
 
 .PHONY: lint
 lint:

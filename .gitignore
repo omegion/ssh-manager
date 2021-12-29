@@ -19,3 +19,7 @@
 
 # Build
 dist
+
+# VuePress
+node_modules
+yarn.lock

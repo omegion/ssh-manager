@@ -17,24 +17,25 @@ SSH Key Manager for Bitwarden and 1Password
 </p>
 
 ```shell
-CLI command to automatically unseal Vault
+SSH Manager for your keys on 1Password and Bitwarden
 
 Usage:
-  vault-unseal [command]
+  ssh-manager [command]
 
 Available Commands:
-  add         Add SSH key to given provider.
-  get         Get SSH key from given provider.
+  add         Add Manager key to given provider.
+  completion  Generate the autocompletion script for the specified shell
+  get         Get Manager key from given provider.
   help        Help about any command
-  list        List SSH keys from given provider.
+  list        List Manager keys from given provider.
   version     Print the version/build number
 
 Flags:
-  -h, --help               help for vault-unseal
+  -h, --help               help for ssh-manager
       --logFormat string   Set the logging format. One of: text|json (default "text") (default "text")
       --logLevel string    Set the logging level. One of: debug|info|warn|error (default "info")
 
-Use "vault-unseal [command] --help" for more information about a command.
+Use "ssh-manager [command] --help" for more information about a command.
 ```
 
 ## Installation
