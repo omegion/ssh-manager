@@ -11,7 +11,7 @@ Or, you can use the usual commands to install or upgrade:
 On OS X
 
 ```shell
-$ curl -L https://github.com/omegion/ssh-manager/releases/download/{{.Env.VERSION}}/ssh-manager-darwin-amd64 >/usr/local/bin/ssh-manager \ 
+$ curl -L https://github.com/omegion/ssh-manager/releases/download/{{.Env.VERSION}}/ssh-manager-darwin-amd64 >/usr/local/bin/ssh-manager \
 && chmod +x /usr/local/bin/ssh-manager
 ```
 
