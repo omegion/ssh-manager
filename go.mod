@@ -3,8 +3,11 @@ module github.com/omegion/ssh-manager
 go 1.17
 
 require (
+	github.com/aws/aws-sdk-go-v2/config v1.11.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.22.0
 	github.com/golang/mock v1.6.0
 	github.com/omegion/cobra-commander v0.6.0
+	github.com/omegion/go-aws-v2-interface v0.3.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.3.0
 	github.com/stretchr/testify v1.7.0
@@ -14,6 +17,19 @@ require (
 require (
 	cloud.google.com/go v0.99.0 // indirect
 	cloud.google.com/go/storage v1.18.2 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.11.2 // indirect
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.0.0 // indirect
+	github.com/aws/aws-sdk-go-v2/credentials v1.6.5 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.8.2 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.2 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.0.2 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.5.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.5.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.9.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.7.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.12.0 // indirect
+	github.com/aws/smithy-go v1.9.0 // indirect
 	github.com/census-instrumentation/opencensus-proto v0.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/cncf/udpa/go v0.0.0-20210930031921-04548b0d99d4 // indirect

@@ -41,7 +41,9 @@ func (b Bitwarden) GetName() string {
 
 // Add adds given item to Bitwarden.
 func (b Bitwarden) Add(item *Item) error {
-	_, err := b.Get(item.Name)
+	_, err := b.Get(GetOptions{
+		Name: item.Name,
+	})
 	if err == nil {
 		return ItemAlreadyExistsError{Name: item.Name}
 	}
@@ -87,7 +89,7 @@ func (b Bitwarden) Add(item *Item) error {
 }
 
 // Get gets Item from Bitwarden with given item name.
-func (b Bitwarden) Get(name string) (*Item, error) {
+func (b Bitwarden) Get(options GetOptions) (*Item, error) {
 	err := b.Sync()
 	if err != nil {
 		return &Item{}, err
@@ -98,14 +100,14 @@ func (b Bitwarden) Get(name string) (*Item, error) {
 		BitwardenCommand,
 		"get",
 		"item",
-		fmt.Sprintf("%s%s", BitwardenDefaultPrefix, name),
+		fmt.Sprintf("%s%s", BitwardenDefaultPrefix, options.Name),
 	)
 
 	var stderr bytes.Buffer
 
 	command.SetStderr(&stderr)
 
-	log.Debugln(fmt.Sprintf("Getting item %s in Bitwarden.", name))
+	log.Debugln(fmt.Sprintf("Getting item %s in Bitwarden.", options.Name))
 
 	output, err := command.Output()
 	if err != nil {
@@ -128,7 +130,7 @@ func (b Bitwarden) Get(name string) (*Item, error) {
 		Name: strings.Replace(tmpItem.Name, BitwardenDefaultPrefix, "", 1),
 	}
 
-	log.Debugln(fmt.Sprintf("Decoding keys for item %s.", name))
+	log.Debugln(fmt.Sprintf("Decoding keys for item %s.", options.Name))
 
 	decodedRawNotes, err := base64.StdEncoding.DecodeString(tmpItem.Notes)
 	if err != nil {
@@ -144,7 +146,7 @@ func (b Bitwarden) Get(name string) (*Item, error) {
 }
 
 // List lists all added SSH keys.
-func (b Bitwarden) List() ([]*Item, error) {
+func (b Bitwarden) List(options ListOptions) ([]*Item, error) {
 	err := b.Sync()
 	if err != nil {
 		return []*Item{}, err

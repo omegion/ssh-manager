@@ -36,6 +36,8 @@ func setupAddCommand(cmd *cobra.Command) {
 	if err := cmd.MarkFlagRequired("provider"); err != nil {
 		log.Fatalf("Lethal damage: %s\n\n", err)
 	}
+
+	cmd.Flags().String("bucket", "", "S3 Bucket Name")
 }
 
 // Add creates Manager key into given provider.
@@ -48,6 +50,7 @@ func Add() *cobra.Command {
 			publicKeyFileName, _ := cmd.Flags().GetString("public-key")
 			privateKeyFileName, _ := cmd.Flags().GetString("private-key")
 			providerName, _ := cmd.Flags().GetString("provider")
+			bucket, _ := cmd.Flags().GetString("bucket")
 
 			publicKey, err := readFile(publicKeyFileName)
 			if err != nil {
@@ -71,6 +74,10 @@ func Add() *cobra.Command {
 						Value: privateKey,
 					},
 				},
+			}
+
+			if bucket != "" {
+				item.Bucket = &bucket
 			}
 
 			err = controller.NewManager(&providerName).Add(&item)

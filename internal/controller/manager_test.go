@@ -56,7 +56,7 @@ func TestManager(t *testing.T) {
 
 		manager := Manager{Provider: prvMock}
 
-		item, err := manager.Get("test")
+		item, err := manager.Get(provider.GetOptions{Name: "test"})
 
 		assert.NoError(t, err)
 		assert.Equal(t, &expectedItem, item)
@@ -65,11 +65,13 @@ func TestManager(t *testing.T) {
 	t.Run("get", func(t *testing.T) {
 		expectedItems = append(expectedItems, &provider.Item{Name: "test"})
 
-		prvMock.EXPECT().List().Return(expectedItems, nil)
+		options := provider.ListOptions{}
+
+		prvMock.EXPECT().List(options).Return(expectedItems, nil)
 
 		manager := Manager{Provider: prvMock}
 
-		items, err := manager.List()
+		items, err := manager.List(options)
 
 		assert.NoError(t, err)
 		assert.Len(t, items, 1)

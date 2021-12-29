@@ -64,7 +64,7 @@ func TestBitwarden_Get(t *testing.T) {
 		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
-	item, err := bw.Get("test")
+	item, err := bw.Get(provider.GetOptions{Name: "test"})
 
 	assert.NoError(t, err)
 	assert.Equal(t, "test", item.Name)
@@ -85,7 +85,7 @@ func TestBitwarden_GetNotFound(t *testing.T) {
 		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
-	_, err := bw.Get("test")
+	_, err := bw.Get(provider.GetOptions{Name: "test"})
 
 	assert.EqualError(t, err, "'bw get': Execution failed: ")
 }
@@ -121,7 +121,7 @@ func TestBitwarden_List(t *testing.T) {
 		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
-	items, err := bw.List()
+	items, err := bw.List(provider.ListOptions{})
 
 	expectedItems := []string{
 		"test1",

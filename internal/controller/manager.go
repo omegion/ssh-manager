@@ -21,13 +21,13 @@ func (c Manager) Add(item *provider.Item) error {
 }
 
 // Get gets item from provider.
-func (c Manager) Get(name string) (*provider.Item, error) {
-	return c.Provider.Get(name)
+func (c Manager) Get(options provider.GetOptions) (*provider.Item, error) {
+	return c.Provider.Get(options)
 }
 
 // List lists items from provider.
-func (c Manager) List() ([]*provider.Item, error) {
-	return c.Provider.List()
+func (c Manager) List(options provider.ListOptions) ([]*provider.Item, error) {
+	return c.Provider.List(options)
 }
 
 func getProviderByName(name *string) provider.Interface {
@@ -38,6 +38,8 @@ func getProviderByName(name *string) provider.Interface {
 		return provider.Bitwarden{Commander: commander}
 	case provider.OnePasswordCommand:
 		return provider.OnePassword{Commander: commander}
+	case provider.S3ProviderName:
+		return provider.NewS3Provider()
 	default:
 		return provider.Bitwarden{Commander: commander}
 	}
