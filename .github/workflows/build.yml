@@ -5,60 +5,60 @@ on:
     tags:
       - 'v*'
 jobs:
-#  push_to_registry:
-#    name: Push Docker image to Docker Hub and GitHub
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Check out the repo
-#        uses: actions/checkout@v2
-#
-#      - name: Import Secrets
-#        id: secrets
-#        uses: hashicorp/vault-action@v2.4.0
-#        with:
-#          url: ${{ secrets.VAULT_ADDR }}
-#          method: github
-#          githubToken: ${{ secrets.GT_VAULT_AUTH_TOKEN }}
-#          secrets: |
-#            github/data/token registry_write | GITHUB_REGISTRY_TOKEN ;
-#
-#      - name: Get the version
-#        id: get_version
-#        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
-#
-#      - name: Login to GitHub
-#        uses: docker/login-action@v1
-#        with:
-#          registry: ghcr.io
-#          username: ${{ github.repository_owner }}
-#          password: ${{ steps.secrets.outputs.GITHUB_REGISTRY_TOKEN }}
-#
-#      - name: Build and push to GitHub
-#        id: github_build
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: ./
-#          file: ./Dockerfile
-#          push: true
-#          tags: ghcr.io/omegion/ssh-manager:latest,ghcr.io/omegion/ssh-manager:${{ steps.get_version.outputs.VERSION }}
-#          build-args: |
-#            VERSION=${{ steps.get_version.outputs.VERSION }}
-#
-#      - name: Build Changelog
-#        id: github_release
-#        uses: mikepenz/release-changelog-builder-action@main
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: Release
-#        uses: softprops/action-gh-release@v1
-#        if: startsWith(github.ref, 'refs/tags/')
-#        with:
-#          name: Release ${{ steps.get_version.outputs.VERSION }}
-#          body: |
-#            ${{steps.github_release.outputs.changelog}}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  push_to_registry:
+    name: Push Docker image to Docker Hub and GitHub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Import Secrets
+        id: secrets
+        uses: hashicorp/vault-action@v2.4.0
+        with:
+          url: ${{ secrets.VAULT_ADDR }}
+          method: github
+          githubToken: ${{ secrets.GT_VAULT_AUTH_TOKEN }}
+          secrets: |
+            github/data/token registry_write | GITHUB_REGISTRY_TOKEN ;
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+
+      - name: Login to GitHub
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ steps.secrets.outputs.GITHUB_REGISTRY_TOKEN }}
+
+      - name: Build and push to GitHub
+        id: github_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/omegion/ssh-manager:latest,ghcr.io/omegion/ssh-manager:${{ steps.get_version.outputs.VERSION }}
+          build-args: |
+            VERSION=${{ steps.get_version.outputs.VERSION }}
+
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: Release ${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ${{steps.github_release.outputs.changelog}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     name: Create Release
@@ -68,9 +68,9 @@ jobs:
         # List of GOOS and GOARCH pairs from `go tool dist list`
         goosarch:
           - 'darwin/amd64'
-#          - 'darwin/arm64'
-#          - 'linux/amd64'
-#          - 'linux/arm64'
+          - 'darwin/arm64'
+          - 'linux/amd64'
+          - 'linux/arm64'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
