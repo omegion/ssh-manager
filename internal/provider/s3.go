@@ -15,14 +15,17 @@ import (
 )
 
 const (
+	// S3ProviderName is provider name for s3.
 	S3ProviderName      = "s3"
-	S3BucketPathFixture = "keys/%s"
+	s3BucketPathFixture = "keys/%s"
 )
 
+// S3 is s3 provider.
 type S3 struct {
 	API aws.S3Interface
 }
 
+// NewS3Provider inits new provider.
 func NewS3Provider() S3 {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
@@ -41,7 +44,7 @@ func (p S3) GetName() string {
 
 // Add adds given item to S3.
 func (p S3) Add(item *Item) error {
-	key := fmt.Sprintf(S3BucketPathFixture, item.Name)
+	key := fmt.Sprintf(s3BucketPathFixture, item.Name)
 
 	value, err := item.MarshalValues()
 	if err != nil {
@@ -66,7 +69,7 @@ func (p S3) Add(item *Item) error {
 func (p S3) Get(options GetOptions) (*Item, error) {
 	item := &Item{Name: options.Name}
 
-	key := fmt.Sprintf(S3BucketPathFixture, item.Name)
+	key := fmt.Sprintf(s3BucketPathFixture, item.Name)
 
 	input := &s3.GetObjectInput{
 		Bucket: options.Bucket,
@@ -97,7 +100,7 @@ func (p S3) Get(options GetOptions) (*Item, error) {
 func (p S3) List(options ListOptions) ([]*Item, error) {
 	items := make([]*Item, 0)
 
-	path := fmt.Sprintf(S3BucketPathFixture, "")
+	path := fmt.Sprintf(s3BucketPathFixture, "")
 	input := &s3.ListObjectsV2Input{
 		Bucket: options.Bucket,
 		Prefix: &path,
@@ -111,7 +114,7 @@ func (p S3) List(options ListOptions) ([]*Item, error) {
 	for _, rItem := range resp.Contents {
 		items = append(items, &Item{
 			Bucket: options.Bucket,
-			Name:   strings.Replace(*rItem.Key, fmt.Sprintf(S3BucketPathFixture, ""), "", 1),
+			Name:   strings.Replace(*rItem.Key, fmt.Sprintf(s3BucketPathFixture, ""), "", 1),
 		})
 	}
 
