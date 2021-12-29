@@ -6,7 +6,7 @@ on:
       - 'v*'
 jobs:
   push_to_registry:
-    name: Push Docker image to Docker Hub and GitHub
+    name: Push Docker image to GitHub
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -26,6 +26,12 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
       - name: Login to GitHub
         uses: docker/login-action@v1
         with:
@@ -41,24 +47,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ghcr.io/omegion/ssh-manager:latest,ghcr.io/omegion/ssh-manager:${{ steps.get_version.outputs.VERSION }}
-          build-args: |
-            VERSION=${{ steps.get_version.outputs.VERSION }}
-
-      - name: Build Changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          name: Release ${{ steps.get_version.outputs.VERSION }}
-          body: |
-            ${{steps.github_release.outputs.changelog}}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          platforms: linux/amd64,linux/arm64
 
   release:
     name: Create Release
