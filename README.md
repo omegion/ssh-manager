@@ -54,7 +54,7 @@ On OS X
 
 ```shell
 VERSION=v0.3.0
-$ curl -L https://github.com/omegion/ssh-manager/releases/download/$VERSION/ssh-manager-darwin-amd64 >/usr/local/bin/ssh-manager \
+curl -L https://github.com/omegion/ssh-manager/releases/download/$VERSION/ssh-manager-darwin-amd64 >/usr/local/bin/ssh-manager \
 && chmod +x /usr/local/bin/ssh-manager
 ```
 
@@ -62,7 +62,7 @@ On Linux
 
 ```shell
 VERSION=v0.3.0
-$ curl -L https://github.com/omegion/ssh-manager/releases/download/$VERSION/ssh-manager-linux/amd64 >/usr/local/bin/ssh-manager \
+curl -L https://github.com/omegion/ssh-manager/releases/download/$VERSION/ssh-manager-linux/amd64 >/usr/local/bin/ssh-manager \
 && chmod +x /tmp/ssh-manager &&
     sudo cp /tmp/ssh-manager /usr/local/bin/ssh-manager
 ```
