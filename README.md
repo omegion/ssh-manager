@@ -1,5 +1,5 @@
 <h1 align="center">
-SSH Key Manager for Bitwarden and 1Password
+SSH Key Manager for 1Password, Bitwarden and AWS S3.
 </h1>
 
 <p align="center">
@@ -17,7 +17,7 @@ SSH Key Manager for Bitwarden and 1Password
 </p>
 
 ```shell
-SSH Manager for your keys on 1Password and Bitwarden
+SSH Key Manager for 1Password, Bitwarden and AWS S3.
 
 Usage:
   ssh-manager [command]
@@ -79,12 +79,19 @@ directly.
 
 ## What does it do?
 
-Injects SSL keys to `ssh-agent` stored in Bitwarden or 1Password.
+Injects SSL keys to `ssh-agent` stored in 1Password, Bitwarden and AWS S3.
 
 ## How to use it
 
-1. Login to Bitwarden or 1Password with `bw` or `op`.
+1. Login to Bitwarden or 1Password with `bw` or `op`. If you are using S3, set your credentials.
 1. Add your key pairs to your password manager.
+
+For 1Password
+---
+
+```shell
+ssh-manager add --name my-another-server --private-key $PK_PATH --public-key $PUB_KEY_PATH --provider op
+```
 
 For Bitwarden
 ---
@@ -93,11 +100,11 @@ For Bitwarden
 ssh-manager add --name my-server --private-key $PK_PATH --public-key $PUB_KEY_PATH --provider bw
 ```
 
-For 1Password
+For AWS S3
 ---
 
 ```shell
-ssh-manager add --name my-another-server --private-key $PK_PATH --public-key $PUB_KEY_PATH --provider op
+ssh-manager add --name my-another-server --private-key $PK_PATH --public-key $PUB_KEY_PATH --provider s3 --bucket my-bucket
 ```
 
 ## Improvements to be made
