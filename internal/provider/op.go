@@ -50,7 +50,9 @@ func (o OnePassword) GetName() string {
 
 // Add adds given item to OnePassword.
 func (o OnePassword) Add(item *Item) error {
-	_, err := o.Get(item.Name)
+	_, err := o.Get(GetOptions{
+		Name: item.Name,
+	})
 	if err == nil {
 		return ItemAlreadyExistsError{Name: item.Name}
 	}
@@ -86,20 +88,20 @@ func (o OnePassword) Add(item *Item) error {
 }
 
 // Get gets Item from OnePassword with given item name.
-func (o OnePassword) Get(name string) (*Item, error) {
+func (o OnePassword) Get(options GetOptions) (*Item, error) {
 	command := o.Commander.Executor.CommandContext(
 		context.Background(),
 		OnePasswordCommand,
 		"get",
 		"item",
-		fmt.Sprintf("%s%s", OnePasswordDefaultPrefix, name),
+		fmt.Sprintf("%s%s", OnePasswordDefaultPrefix, options.Name),
 	)
 
 	var stderr bytes.Buffer
 
 	command.SetStderr(&stderr)
 
-	log.Debugln(fmt.Sprintf("Getting item %s in OnePassword.", name))
+	log.Debugln(fmt.Sprintf("Getting item %s in OnePassword.", options.Name))
 
 	output, err := command.Output()
 	if err != nil {
@@ -118,7 +120,7 @@ func (o OnePassword) Get(name string) (*Item, error) {
 		Name: strings.Replace(*opItem.Overview.Title, OnePasswordDefaultPrefix, "", 1),
 	}
 
-	log.Debugln(fmt.Sprintf("Decoding keys for item %s.", name))
+	log.Debugln(fmt.Sprintf("Decoding keys for item %s.", options.Name))
 
 	decodedRawNotes, err := base64.StdEncoding.DecodeString(*opItem.Details.NotesPlain)
 	if err != nil {
@@ -134,7 +136,7 @@ func (o OnePassword) Get(name string) (*Item, error) {
 }
 
 // List lists all added SSH keys.
-func (o OnePassword) List() ([]*Item, error) {
+func (o OnePassword) List(options ListOptions) ([]*Item, error) {
 	command := o.Commander.Executor.CommandContext(
 		context.Background(),
 		OnePasswordCommand,

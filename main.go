@@ -12,8 +12,8 @@ import (
 func main() {
 	root := &cobra.Command{
 		Use:          "ssh-manager",
-		Short:        "SSH Manager for your keys",
-		Long:         "SSH Manager for your keys on 1Password and Bitwarden",
+		Short:        "SSH Key Manager.",
+		Long:         "SSH Key Manager for 1Password, Bitwarden and AWS S3.",
 		SilenceUsage: true,
 	}
 

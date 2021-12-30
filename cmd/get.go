@@ -8,6 +8,7 @@ import (
 
 	"github.com/omegion/ssh-manager/internal/controller"
 	"github.com/omegion/ssh-manager/internal/io"
+	"github.com/omegion/ssh-manager/internal/provider"
 )
 
 // setupGetCommand sets default flags.
@@ -25,6 +26,7 @@ func setupGetCommand(cmd *cobra.Command) {
 	}
 
 	cmd.Flags().Bool("read-only", false, "Do not write fetched Manager keys")
+	cmd.Flags().String("bucket", "", "S3 Bucket Name")
 }
 
 // Get acquires Manager key from given provider.
@@ -36,8 +38,15 @@ func Get() *cobra.Command {
 			name, _ := cmd.Flags().GetString("name")
 			providerName, _ := cmd.Flags().GetString("provider")
 			readOnly, _ := cmd.Flags().GetBool("read-only")
+			bucket, _ := cmd.Flags().GetString("bucket")
 
-			item, err := controller.NewManager(&providerName).Get(name)
+			options := provider.GetOptions{Name: name}
+
+			if bucket != "" {
+				options.Bucket = &bucket
+			}
+
+			item, err := controller.NewManager(&providerName).Get(options)
 			if err != nil {
 				return err
 			}

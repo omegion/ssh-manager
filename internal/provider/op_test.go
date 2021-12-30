@@ -69,7 +69,7 @@ func TestOnePassword_Get(t *testing.T) {
 		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
-	item, err := op.Get("test")
+	item, err := op.Get(provider.GetOptions{Name: "test"})
 
 	assert.NoError(t, err)
 	assert.Equal(t, "test", item.Name)
@@ -88,7 +88,7 @@ func TestOnePassword_GetNotFound(t *testing.T) {
 		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
-	_, err := op.Get("test")
+	_, err := op.Get(provider.GetOptions{Name: "test"})
 
 	assert.Error(t, err)
 }
@@ -108,7 +108,7 @@ func TestOnePassword_List(t *testing.T) {
 		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
 	}
 
-	items, err := op.List()
+	items, err := op.List(provider.ListOptions{})
 
 	expectedItems := map[string]string{
 		"X": "test1",
