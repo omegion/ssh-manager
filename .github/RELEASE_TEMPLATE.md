@@ -18,7 +18,7 @@ sudo curl -fL https://github.com/omegion/ssh-manager/releases/download/{{.Env.VE
 On Linux
 
 ```shell
-sudo curl -fL https://github.com/omegion/ssh-manager/releases/download/{{.Env.VERSION}}/ssh-manager-linux-amd64-o /usr/local/bin/ssh-manager \
+sudo curl -fL https://github.com/omegion/ssh-manager/releases/download/{{.Env.VERSION}}/ssh-manager-linux-amd64 -o /usr/local/bin/ssh-manager \
 && sudo chmod +x /usr/local/bin/ssh-manager
 ```
 
