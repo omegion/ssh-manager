@@ -40,7 +40,7 @@ Use "ssh-manager [command] --help" for more information about a command.
 
 ## Installation
 
-You can use `go` to build SSH-Manager locally with:
+You can use `go` to build SSH Manager locally with:
 
 ```shell
 go get -u github.com/omegion/ssh-manager
