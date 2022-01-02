@@ -40,7 +40,7 @@ Use "ssh-manager [command] --help" for more information about a command.
 
 ## Installation
 
-You can use `go` to build S3 Secrets Manager locally with:
+You can use `go` to build SSH-Manager locally with:
 
 ```shell
 go get -u github.com/omegion/ssh-manager
@@ -53,18 +53,15 @@ Or, you can use the usual commands to install or upgrade:
 On OS X
 
 ```shell
-VERSION=v0.3.0
-curl -L https://github.com/omegion/ssh-manager/releases/download/$VERSION/ssh-manager-darwin-amd64 >/usr/local/bin/ssh-manager \
-&& chmod +x /usr/local/bin/ssh-manager
+sudo curl -fL https://github.com/omegion/ssh-manager/releases/latest/download/ssh-manager-darwin-amd64 -o /usr/local/bin/ssh-manager \
+&& sudo chmod +x /usr/local/bin/ssh-manager
 ```
 
 On Linux
 
 ```shell
-VERSION=v0.3.0
-curl -L https://github.com/omegion/ssh-manager/releases/download/$VERSION/ssh-manager-linux/amd64 >/usr/local/bin/ssh-manager \
-&& chmod +x /tmp/ssh-manager &&
-    sudo cp /tmp/ssh-manager /usr/local/bin/ssh-manager
+sudo curl -fL https://github.com/omegion/ssh-manager/releases/latest/download/ssh-manager-linux-amd64 -o /usr/local/bin/ssh-manager \
+&& sudo chmod +x /usr/local/bin/ssh-manager
 ```
 
 Otherwise, download one of the releases from the [release page](https://github.com/omegion/ssh-manager/releases/)
