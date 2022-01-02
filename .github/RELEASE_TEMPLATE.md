@@ -22,6 +22,12 @@ sudo curl -fL https://github.com/omegion/ssh-manager/releases/download/{{.Env.VE
 && sudo chmod +x /usr/local/bin/ssh-manager
 ```
 
+On Windows (Powershell)
+
+```powershell
+Invoke-WebRequest -Uri https://github.com/omegion/ssh-manager/releases/download/{{.Env.VERSION}}/ssh-manager-windows-amd64 -OutFile $home\AppData\Local\Microsoft\WindowsApps\ssh-manager.exe
+```
+
 Otherwise, download one of the releases from the [release page](https://github.com/omegion/ssh-manager/releases/)
 directly.
 
