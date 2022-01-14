@@ -43,7 +43,7 @@ Use "ssh-manager [command] --help" for more information about a command.
 You can use `go` to build SSH Manager locally with:
 
 ```shell
-go install github.com/omegion/ssh-manager
+go install github.com/omegion/ssh-manager@latest
 ```
 
 This will install `ssh-manager` binary to your `GOPATH`.

@@ -3,7 +3,7 @@
 You can use `go` to build SSH Manager locally with:
 
 ```shell
-go get -u github.com/omegion/ssh-manager
+go install github.com/omegion/ssh-manager@latest
 ```
 
 Or, you can use the usual commands to install or upgrade:
