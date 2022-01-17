@@ -357,8 +357,8 @@ github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjY
 github.com/mwitkow/go-conntrack v0.0.0-20161129095857-cc309e4a2223/go.mod h1:qRWi+5nqEBWmkhHvq77mSJWrCKwh8bxhgT7d/eI7P4U=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e h1:fD57ERR4JtEqsWbfPhv4DMiApHyliiK5xCTNVSPiaAs=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
-github.com/omegion/cobra-commander v0.6.0 h1:S8HYXwK74kiYqoNDLpvvVdS/1c0sk6LFZuU9/8oGPCQ=
-github.com/omegion/cobra-commander v0.6.0/go.mod h1:7YC9d3k6LrDvMp1E6Vgc6U1ojunWTLLLT7IK5Un9Q4o=
+github.com/omegion/cobra-commander v0.10.0 h1:kASIzW8YCVbdMiwvkoff40HedHFKCj4dU+CboS0hEks=
+github.com/omegion/cobra-commander v0.10.0/go.mod h1:7YC9d3k6LrDvMp1E6Vgc6U1ojunWTLLLT7IK5Un9Q4o=
 github.com/omegion/go-aws-v2-interface v0.3.0 h1:oEm5t1eCANN4/631XnSumK56Xkcx4KxSxXcwOsbDif8=
 github.com/omegion/go-aws-v2-interface v0.3.0/go.mod h1:0ASeQmxaxSwn4lPJb7OaTWrUdW620Gyqy1Oojy76wiY=
 github.com/pascaldekloe/goe v0.0.0-20180627143212-57f6aae5913c/go.mod h1:lzWF7FIEvWOWxwDKqyGYQf6ZUaNfKdP144TG7ZOy1lc=
