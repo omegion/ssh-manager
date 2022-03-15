@@ -10,7 +10,7 @@ require (
 	github.com/omegion/cobra-commander v0.10.0
 	github.com/omegion/go-aws-v2-interface v0.3.0
 	github.com/sirupsen/logrus v1.8.1
-	github.com/spf13/cobra v1.3.0
+	github.com/spf13/cobra v1.4.0
 	github.com/stretchr/testify v1.7.0
 	k8s.io/utils v0.0.0-20211208161948-7d6a63dca704
 )
