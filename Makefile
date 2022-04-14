@@ -7,7 +7,7 @@ else
 endif
 
 BASE_PACKAGE_NAME  = github.com/omegion/ssh-manager
-LDFLAGS            = -ldflags "-X $(BASE_PACKAGE_NAME)/internal/info.Version=$(GIT_VERSION)"
+LDFLAGS            = -ldflags "-buildid=$(GIT_VERSION)"
 BUFFER            := $(shell mktemp)
 REPORT_DIR         = dist/report
 COVER_PROFILE      = $(REPORT_DIR)/coverage.out
@@ -25,9 +25,12 @@ lint:
 	gofmt -l . | tee $(BUFFER)
 	@! test -s $(BUFFER)
 	go vet ./...
+
+	# golangci-lint
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.45.2
 	@golangci-lint --version
 	golangci-lint run
+
 	# Statuscheck
 	go install honnef.co/go/tools/cmd/staticcheck@2022.1
 	staticcheck ./...
@@ -46,7 +49,7 @@ cut-tag:
 	git push origin $(version)
 
 .PHONY: release
-release: build-for-container
+release:
 	@echo "Releasing $(GIT_VERSION)"
 	docker build -t ssh-manager .
 	docker tag ssh-manager:latest omegion/ssh-manager:$(GIT_VERSION)
