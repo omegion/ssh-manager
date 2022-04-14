@@ -17,59 +17,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Get dependencies
+      - name: Get OS and arch info
         run: |
-          go get -v -t -d ./...
-      - name: go test
-        run: go test -v -covermode=count -coverprofile=coverage.out ./...
+          VERSION=${{github.ref_name}}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Convert coverage.out to coverage.lcov
-        uses: jandelgado/gcov2lcov-action@v1.0.8
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage.lcov
-
-  vet:
-    name: go vet and statuscheck
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Go 1.x
-        uses: actions/setup-go@v3
-        with:
-          go-version: ^1.18
-        id: go
-
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: go vet
+      - name: Build
         run: |
-          go get -v -t -d ./...
-          go vet ./...
-
-      - name: go staticcheck
-        uses: dominikh/staticcheck-action@v1.1.0
-        with:
-          version: "2022.1"
-          install-go: false
-
-  golangci:
-    name: golangci lint check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Go 1.x
-        uses: actions/setup-go@v3
-        with:
-          go-version: ^1.18
-        id: go
-
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: v1.45.2
+          make build VERSION="$VERSION"
+      

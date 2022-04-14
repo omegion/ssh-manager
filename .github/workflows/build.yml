@@ -80,7 +80,7 @@ jobs:
           GOOS=${GOOSARCH%/*}
           GOARCH=${GOOSARCH#*/}
           BINARY_NAME=ssh-manager-$GOOS-$GOARCH
-          VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
+          VERSION=${{github.ref_name}}
           echo "BINARY_NAME=$BINARY_NAME" >> $GITHUB_ENV
           echo "GOOS=$GOOS" >> $GITHUB_ENV
           echo "GOARCH=$GOARCH" >> $GITHUB_ENV
