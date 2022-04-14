@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.x
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
-          go-version: ^1.17
+          go-version: ^1.18
         id: go
 
       - name: Checkout code
@@ -33,36 +33,43 @@ jobs:
           path-to-lcov: coverage.lcov
 
   vet:
-    name: go vet and lint
+    name: go vet and statuscheck
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.x
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
-          go-version: ^1.16
+          go-version: ^1.18
         id: go
 
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Get dependencies
+      - name: go vet
         run: |
           go get -v -t -d ./...
-          go get -u golang.org/x/lint/golint
-      - name: go vet
-        run: go vet ./...
+          go vet ./...
 
-      - name: go lint
-        run: golint -set_exit_status ./...
+      - name: go staticcheck
+        uses: dominikh/staticcheck-action@v1.1.0
+        with:
+          version: "2022.1"
+          install-go: false
 
   golangci:
     name: golangci lint check
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.18
+        id: go
+
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.43.0
+          version: v1.45.2
