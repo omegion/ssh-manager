@@ -25,11 +25,12 @@ lint:
 	gofmt -l . | tee $(BUFFER)
 	@! test -s $(BUFFER)
 	go vet ./...
-	go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.45.2
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.45.2
 	@golangci-lint --version
 	golangci-lint run
-	go get -u golang.org/x/lint/golint
-	golint -set_exit_status ./...
+	# Statuscheck
+	go install honnef.co/go/tools/cmd/staticcheck@2022.1
+	staticcheck ./...
 
 .PHONY: test
 test:

@@ -42,24 +42,24 @@ type Item struct {
 
 // EncodeValues encodes Values.
 func (i Item) EncodeValues() (string, error) {
-	var p []byte
+	var values []byte
 
-	p, err := i.MarshalValues()
+	values, err := i.MarshalValues()
 	if err != nil {
 		return "", err
 	}
 
-	return base64.StdEncoding.EncodeToString(p), nil
+	return base64.StdEncoding.EncodeToString(values), nil
 }
 
 // MarshalValues encodes the Values to JSON bytes.
 func (i Item) MarshalValues() ([]byte, error) {
-	var p []byte
+	var values []byte
 
-	p, err := json.Marshal(i.Values)
+	values, err := json.Marshal(i.Values)
 	if err != nil {
 		return nil, err
 	}
 
-	return p, nil
+	return values, nil
 }
