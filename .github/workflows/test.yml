@@ -48,17 +48,19 @@ jobs:
       - name: Get dependencies
         run: |
           go get -v -t -d ./...
-          go install -u golang.org/x/lint/golint
       - name: go vet
         run: go vet ./...
-
-      - name: go lint
-        run: golint -set_exit_status ./...
 
   golangci:
     name: golangci lint check
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.18
+        id: go
+
       - name: Checkout code
         uses: actions/checkout@v3
 
