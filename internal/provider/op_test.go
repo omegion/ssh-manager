@@ -57,6 +57,37 @@ func TestOnePassword_Add(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestOnePassword_Add_ItemExists(t *testing.T) {
+	expectedCommands := []test.FakeCommand{
+		{
+			Command: fmt.Sprintf("op get item %s%s", provider.BitwardenDefaultPrefix, "test"),
+			StdOut:  test.Must(test.LoadFixture("op_get.txt")),
+		},
+		{
+			Command: fmt.Sprintf(
+				"op create item login notesPlain=%s --title %s%s --tags %s",
+				encodedValues,
+				provider.BitwardenDefaultPrefix,
+				"test",
+				strings.Replace(provider.OnePasswordDefaultPrefix, "__", "", 1),
+			),
+			StdOut: test.Must(test.LoadFixture("op_add.txt")),
+		},
+	}
+
+	onep := provider.OnePassword{
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
+	}
+
+	item := provider.Item{
+		Name: "test",
+	}
+
+	err := onep.Add(&item)
+
+	assert.EqualError(t, err, "item test already exists")
+}
+
 func TestOnePassword_Get(t *testing.T) {
 	expectedCommands := []test.FakeCommand{
 		{
@@ -90,7 +121,7 @@ func TestOnePassword_GetNotFound(t *testing.T) {
 
 	_, err := op.Get(provider.GetOptions{Name: "test"})
 
-	assert.Error(t, err)
+	assert.EqualError(t, err, "'op get item': Execution failed: Not found.: ")
 }
 
 func TestOnePassword_List(t *testing.T) {

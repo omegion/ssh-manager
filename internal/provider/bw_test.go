@@ -49,6 +49,35 @@ func TestBitwarden_Add(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestBitwarden_Add_ItemExists(t *testing.T) {
+	expectedCommands := []test.FakeCommand{
+		{
+			Command: "bw sync",
+		},
+		{
+			Command: fmt.Sprintf("bw get item %s%s", provider.BitwardenDefaultPrefix, "test"),
+			StdOut:  test.Must(test.LoadFixture("bw_get.txt")),
+		},
+		{
+			//nolint:lll // allow long lines.
+			Command: "bw create item eyJpZCI6bnVsbCwidHlwZSI6MSwibmFtZSI6IlNTSEtleXNfX3Rlc3QiLCJub3RlcyI6Ilczc2libUZ0WlNJNkluQnlhWFpoZEdWZmEyVjVJaXdpZG1Gc2RXVWlPaUpZSW4wc2V5SnVZVzFsSWpvaWNIVmliR2xqWDJ0bGVTSXNJblpoYkhWbElqb2lXU0o5WFE9PSIsImxvZ2luIjoidGVzdCJ9",
+			StdOut:  test.Must(test.LoadFixture("bw_add.txt")),
+		},
+	}
+
+	bitw := provider.Bitwarden{
+		Commander: internal.Commander{Executor: test.NewExecutor(expectedCommands)},
+	}
+
+	item := provider.Item{
+		Name: "test",
+	}
+
+	err := bitw.Add(&item)
+
+	assert.EqualError(t, err, "item test already exists")
+}
+
 func TestBitwarden_Get(t *testing.T) {
 	expectedCommands := []test.FakeCommand{
 		{
@@ -87,7 +116,7 @@ func TestBitwarden_GetNotFound(t *testing.T) {
 
 	_, err := bw.Get(provider.GetOptions{Name: "test"})
 
-	assert.EqualError(t, err, "'bw get': Execution failed: ")
+	assert.EqualError(t, err, "'bw get': Execution failed: Not found.: ")
 }
 
 func TestBitwarden_Sync(t *testing.T) {

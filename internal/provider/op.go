@@ -81,7 +81,10 @@ func (o OnePassword) Add(item *Item) error {
 
 	_, err = command.Output()
 	if err != nil {
-		return ExecutionFailedError{Command: "op create", Message: stderr.String()}
+		return ExecutionFailedError{
+			Command: "op create",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	return nil
@@ -105,14 +108,20 @@ func (o OnePassword) Get(options GetOptions) (*Item, error) {
 
 	output, err := command.Output()
 	if err != nil {
-		return &Item{}, ExecutionFailedError{Command: "op get item", Message: stderr.String()}
+		return &Item{}, ExecutionFailedError{
+			Command: "op get item",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	var opItem OnePasswordItem
 
 	err = json.Unmarshal(output, &opItem)
 	if err != nil {
-		return &Item{}, err
+		return &Item{}, ExecutionFailedError{
+			Command: "op get item",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	item := Item{
@@ -124,12 +133,18 @@ func (o OnePassword) Get(options GetOptions) (*Item, error) {
 
 	decodedRawNotes, err := base64.StdEncoding.DecodeString(*opItem.Details.NotesPlain)
 	if err != nil {
-		return &Item{}, err
+		return &Item{}, ExecutionFailedError{
+			Command: "op get item",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	err = json.Unmarshal(decodedRawNotes, &item.Values)
 	if err != nil {
-		return &Item{}, err
+		return &Item{}, ExecutionFailedError{
+			Command: "op get item",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	return &item, nil
@@ -156,14 +171,20 @@ func (o OnePassword) List(options ListOptions) ([]*Item, error) {
 
 	output, err := command.Output()
 	if err != nil {
-		return []*Item{}, ExecutionFailedError{Command: "op list", Message: stderr.String()}
+		return []*Item{}, ExecutionFailedError{
+			Command: "op list",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	var opItems []OnePasswordItem
 
 	err = json.Unmarshal(output, &opItems)
 	if err != nil {
-		return []*Item{}, err
+		return []*Item{}, ExecutionFailedError{
+			Command: "op list",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	items := make([]*Item, 0)
