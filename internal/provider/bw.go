@@ -82,7 +82,10 @@ func (b Bitwarden) Add(item *Item) error {
 
 	_, err = command.Output()
 	if err != nil {
-		return ExecutionFailedError{Command: "bw get", Message: stderr.String()}
+		return ExecutionFailedError{
+			Command: "bw create item",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	return nil
@@ -107,11 +110,14 @@ func (b Bitwarden) Get(options GetOptions) (*Item, error) {
 
 	command.SetStderr(&stderr)
 
-	log.Debugln(fmt.Sprintf("Getting item %s in Bitwarden.", options.Name))
+	log.Debugln(fmt.Sprintf("Getting item %s from Bitwarden.", options.Name))
 
 	output, err := command.Output()
 	if err != nil {
-		return &Item{}, ExecutionFailedError{Command: "bw get", Message: stderr.String()}
+		return &Item{}, ExecutionFailedError{
+			Command: "bw get",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	var tmpItem struct {
@@ -122,7 +128,10 @@ func (b Bitwarden) Get(options GetOptions) (*Item, error) {
 
 	err = json.Unmarshal(output, &tmpItem)
 	if err != nil {
-		return &Item{}, err
+		return &Item{}, ExecutionFailedError{
+			Command: "bw get",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	item := Item{
@@ -165,11 +174,14 @@ func (b Bitwarden) List(options ListOptions) ([]*Item, error) {
 
 	command.SetStderr(&stderr)
 
-	log.Debugln("Getting items in Bitwarden.")
+	log.Debugln("Getting items from Bitwarden.")
 
 	output, err := command.Output()
 	if err != nil {
-		return []*Item{}, ExecutionFailedError{Command: "bw get", Message: stderr.String()}
+		return []*Item{}, ExecutionFailedError{
+			Command: "bw get",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	type tmpItem struct {
@@ -182,7 +194,10 @@ func (b Bitwarden) List(options ListOptions) ([]*Item, error) {
 
 	err = json.Unmarshal(output, &tmpItems)
 	if err != nil {
-		return []*Item{}, err
+		return []*Item{}, ExecutionFailedError{
+			Command: "bw get",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	items := make([]*Item, 0)
@@ -210,7 +225,10 @@ func (b Bitwarden) Sync() error {
 	command.SetStderr(&stderr)
 
 	if _, err := command.Output(); err != nil {
-		return ExecutionFailedError{Command: "bw sync", Message: stderr.String()}
+		return ExecutionFailedError{
+			Command: "bw sync",
+			Message: fmt.Sprintf("%v: %s", err, stderr.String()),
+		}
 	}
 
 	log.Debugln("Syncing Bitwarden Vault.")
