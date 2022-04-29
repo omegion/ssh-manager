@@ -2,15 +2,6 @@ package provider
 
 import "fmt"
 
-// NotFoundError occurs when no provider found.
-type NotFoundError struct {
-	Name *string
-}
-
-func (e NotFoundError) Error() string {
-	return fmt.Sprintf("no provider found for %s", *e.Name)
-}
-
 // ExecutionFailedError occurs when an execution fails.
 type ExecutionFailedError struct {
 	Command string
