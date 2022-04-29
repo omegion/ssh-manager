@@ -87,7 +87,7 @@ func TestBitwarden_GetNotFound(t *testing.T) {
 
 	_, err := bw.Get(provider.GetOptions{Name: "test"})
 
-	assert.EqualError(t, err, "'bw get': Execution failed: ")
+	assert.EqualError(t, err, "'bw get': Execution failed: Not found.: ")
 }
 
 func TestBitwarden_Sync(t *testing.T) {

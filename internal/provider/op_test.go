@@ -90,7 +90,7 @@ func TestOnePassword_GetNotFound(t *testing.T) {
 
 	_, err := op.Get(provider.GetOptions{Name: "test"})
 
-	assert.Error(t, err)
+	assert.EqualError(t, err, "'op get item': Execution failed: Not found.: ")
 }
 
 func TestOnePassword_List(t *testing.T) {
