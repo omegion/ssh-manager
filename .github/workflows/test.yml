@@ -24,9 +24,7 @@ jobs:
         run: go test -v -covermode=count -coverprofile=coverage.out ./...
 
       - name: Convert coverage.out to coverage.lcov
-        uses: jandelgado/gcov2lcov-action@v1.0.8
-        with:
-          version: v1.0.5
+        uses: jandelgado/gcov2lcov-action@v1.0.5
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
