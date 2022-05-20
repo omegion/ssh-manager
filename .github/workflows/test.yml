@@ -33,12 +33,6 @@ jobs:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: goveralls -coverprofile=covprofile -service=github
 
-  #      - name: Coveralls
-  #        uses: coverallsapp/github-action@master
-  #        with:
-  #          github-token: ${{ secrets.GITHUB_TOKEN }}
-  #          path-to-lcov: coverage.lcov
-
   vet:
     name: go vet and statuscheck
     runs-on: ubuntu-latest
