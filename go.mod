@@ -8,7 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.26.10
 	github.com/go-asset/build v0.0.1
 	github.com/golang/mock v1.6.0
-	github.com/omegion/cobra-commander v0.10.0
+	github.com/omegion/cobra-commander v0.11.0
 	github.com/omegion/go-aws-v2-interface v0.3.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.4.0
