@@ -250,8 +250,8 @@ github.com/magiconair/properties v1.8.5/go.mod h1:y3VJvCyxH9uVvJTWEGAELF3aiYNyPK
 github.com/mitchellh/mapstructure v1.4.3 h1:OVowDSCllw/YjdLkam3/sm7wEtOy59d8ndGgCcyj8cs=
 github.com/mitchellh/mapstructure v1.4.3/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e h1:fD57ERR4JtEqsWbfPhv4DMiApHyliiK5xCTNVSPiaAs=
-github.com/omegion/cobra-commander v0.10.0 h1:kASIzW8YCVbdMiwvkoff40HedHFKCj4dU+CboS0hEks=
-github.com/omegion/cobra-commander v0.10.0/go.mod h1:7YC9d3k6LrDvMp1E6Vgc6U1ojunWTLLLT7IK5Un9Q4o=
+github.com/omegion/cobra-commander v0.11.0 h1:s3diIUeGuh4eneir71VmiI7UEGqr6Blb4wILFDvHRio=
+github.com/omegion/cobra-commander v0.11.0/go.mod h1:R1snwgSQ7717rnNHpRHuh8zIpV8Qpnr32EWCUatUOBI=
 github.com/omegion/go-aws-v2-interface v0.3.0 h1:oEm5t1eCANN4/631XnSumK56Xkcx4KxSxXcwOsbDif8=
 github.com/omegion/go-aws-v2-interface v0.3.0/go.mod h1:0ASeQmxaxSwn4lPJb7OaTWrUdW620Gyqy1Oojy76wiY=
 github.com/pelletier/go-toml v1.9.4 h1:tjENF6MfZAg8e4ZmZTeWaWiT2vXtsoO6+iuOjFhECwM=
