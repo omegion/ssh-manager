@@ -21,10 +21,6 @@ func setupAddCommand(cmd *cobra.Command) {
 
 	cmd.Flags().String("public-key", "", "Public Key file")
 
-	if err := cmd.MarkFlagRequired("public-key"); err != nil {
-		log.Fatalf("Lethal damage: %s\n\n", err)
-	}
-
 	cmd.Flags().String("private-key", "", "Private Key file")
 
 	if err := cmd.MarkFlagRequired("private-key"); err != nil {
@@ -47,10 +43,13 @@ func Add() *cobra.Command {
 		Short: "Add Manager key to given provider.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, _ := cmd.Flags().GetString("name")
-			publicKeyFileName, _ := cmd.Flags().GetString("public-key")
-			privateKeyFileName, _ := cmd.Flags().GetString("private-key")
 			providerName, _ := cmd.Flags().GetString("provider")
 			bucket, _ := cmd.Flags().GetString("bucket")
+			privateKeyFileName, _ := cmd.Flags().GetString("private-key")
+			publicKeyFileName, err := cmd.Flags().GetString("public-key")
+			if err != nil {
+				publicKeyFileName = privateKeyFileName + ".pub"
+			}
 
 			publicKey, err := readFile(publicKeyFileName)
 			if err != nil {
