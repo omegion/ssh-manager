@@ -86,28 +86,30 @@ Injects SSL keys to `ssh-agent` stored in 1Password, Bitwarden and AWS S3.
 
 ## How to use it
 
-1. Login to Bitwarden or 1Password with `bw` or `op`. If you are using S3, set your credentials.
+1. Login to Bitwarden (and export its session key) or 1Password with `bw` or `op`. If you are using S3, set your credentials.
 1. Add your key pairs to your password manager.
+
+> **NOTE:** If not public key is given, the private one, postfixed with `.pub`, will be used.
 
 For 1Password
 ---
 
 ```shell
-ssh-manager add --name my-another-server --private-key $PK_PATH --public-key $PUB_KEY_PATH --provider op
+ssh-manager add --name my-another-server --private-key $PK_PATH [ --public-key $PUB_KEY_PATH ] --provider op
 ```
 
 For Bitwarden
 ---
 
 ```shell
-ssh-manager add --name my-server --private-key $PK_PATH --public-key $PUB_KEY_PATH --provider bw
+ssh-manager add --name my-server --private-key $PK_PATH [ --public-key $PUB_KEY_PATH ] --provider bw
 ```
 
 For AWS S3
 ---
 
 ```shell
-ssh-manager add --name my-another-server --private-key $PK_PATH --public-key $PUB_KEY_PATH --provider s3 --bucket my-bucket
+ssh-manager add --name my-another-server --private-key $PK_PATH [ --public-key $PUB_KEY_PATH ] --provider s3 --bucket my-bucket
 ```
 
 ## Improvements to be made

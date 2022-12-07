@@ -21,10 +21,6 @@ func setupAddCommand(cmd *cobra.Command) {
 
 	cmd.Flags().String("public-key", "", "Public Key file")
 
-	if err := cmd.MarkFlagRequired("public-key"); err != nil {
-		log.Fatalf("Lethal damage: %s\n\n", err)
-	}
-
 	cmd.Flags().String("private-key", "", "Private Key file")
 
 	if err := cmd.MarkFlagRequired("private-key"); err != nil {
@@ -52,14 +48,14 @@ func Add() *cobra.Command {
 			providerName, _ := cmd.Flags().GetString("provider")
 			bucket, _ := cmd.Flags().GetString("bucket")
 
-			publicKey, err := readFile(publicKeyFileName)
+			privateKey, err := readFile(privateKeyFileName)
 			if err != nil {
 				return err
 			}
 
-			privateKey, err := readFile(privateKeyFileName)
+			publicKey, err := readFile(publicKeyFileName)
 			if err != nil {
-				return err
+				publicKey = privateKey + ".pub"
 			}
 
 			item := provider.Item{
