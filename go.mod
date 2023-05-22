@@ -12,7 +12,7 @@ require (
 	github.com/omegion/go-aws-v2-interface v0.3.0
 	github.com/sirupsen/logrus v1.9.2
 	github.com/spf13/cobra v1.7.0
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 	k8s.io/utils v0.0.0-20211208161948-7d6a63dca704
 )
 
