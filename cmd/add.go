@@ -51,14 +51,14 @@ func Add() *cobra.Command {
 				publicKeyFileName = privateKeyFileName + ".pub"
 			}
 
-			publicKey, err := readFile(publicKeyFileName)
+			privateKey, err := readFile(privateKeyFileName)
 			if err != nil {
 				return err
 			}
 
-			privateKey, err := readFile(privateKeyFileName)
+			publicKey, err := readFile(publicKeyFileName)
 			if err != nil {
-				return err
+				publicKey = privateKey + ".pub"
 			}
 
 			item := provider.Item{
