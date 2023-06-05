@@ -14,7 +14,7 @@ jobs:
 
       - name: Import Secrets
         id: secrets
-        uses: hashicorp/vault-action@v2.4.2
+        uses: hashicorp/vault-action@v2.5.0
         with:
           url: ${{ secrets.VAULT_ADDR }}
           method: github
@@ -41,7 +41,7 @@ jobs:
 
       - name: Build and push to GitHub
         id: github_build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: ./
           file: ./Dockerfile
@@ -71,7 +71,7 @@ jobs:
         run: |
           VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@v4
         with:
           go-version: '1.18'
       - name: Get OS and arch info
