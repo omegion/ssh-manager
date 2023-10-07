@@ -1,30 +1,59 @@
-name: Build
+name: Build Docker Image
 
 on:
   push:
     tags:
       - 'v*'
+  workflow_run:
+    workflows: ["Tests"]
+    branches: [master]
+    types:
+      - completed
+
 jobs:
-  push_to_registry:
-    name: Push Docker image to GitHub
-    runs-on: ubuntu-latest
+  release:
+    name: Release GitHub tag
+    runs-on: 'ubuntu-latest'
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      contents: write
+    outputs:
+      new_tag: ${{ steps.tag_version.outputs.new_tag }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
 
-      - name: Import Secrets
-        id: secrets
-        uses: hashicorp/vault-action@v2.7.3
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
         with:
-          url: ${{ secrets.VAULT_ADDR }}
-          method: github
-          githubToken: ${{ secrets.GT_VAULT_AUTH_TOKEN }}
-          secrets: |
-            github/data/token registry_write | GITHUB_REGISTRY_TOKEN ;
+          default_bump: minor
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+      - name: Release with Notes
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  push:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    needs: [ release ]
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_REGISTRY_TOKEN }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -32,78 +61,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to GitHub
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ steps.secrets.outputs.GITHUB_REGISTRY_TOKEN }}
-
       - name: Build and push to GitHub
-        id: github_build
         uses: docker/build-push-action@v5
         with:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/omegion/ssh-manager:latest,ghcr.io/omegion/ssh-manager:${{ steps.get_version.outputs.VERSION }}
+          tags: ghcr.io/omegion/ssh-manager:latest,ghcr.io/omegion/ssh-manager:${{ needs.release.outputs.new_tag }}
           platforms: linux/amd64,linux/arm64
-
-  release:
-    name: Create Release
-    runs-on: 'ubuntu-latest'
-    strategy:
-      matrix:
-        # List of GOOS and GOARCH pairs from `go tool dist list`
-        goosarch:
-          - 'darwin/amd64'
-          - 'darwin/arm64'
-          - 'linux/amd64'
-          - 'linux/arm64'
-          - 'windows/amd64'
-          - 'windows/arm64'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Get the version
-        run: |
-          VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '1.18'
-      - name: Get OS and arch info
-        run: |
-          GOOSARCH=${{matrix.goosarch}}
-          GOOS=${GOOSARCH%/*}
-          GOARCH=${GOOSARCH#*/}
-          BINARY_NAME=ssh-manager-$GOOS-$GOARCH
-          VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
-          echo "BINARY_NAME=$BINARY_NAME" >> $GITHUB_ENV
-          echo "GOOS=$GOOS" >> $GITHUB_ENV
-          echo "GOARCH=$GOARCH" >> $GITHUB_ENV
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-      - name: Build
-        run: |
-          make build TARGETOS="$GOOS" TARGETARCH="$GOARCH" VERSION="$VERSION" BINARY_NAME="$BINARY_NAME"
-      - name: Release Notes
-        run: |
-          export VERSION=${{env.VERSION}}
-
-          git log $(git describe HEAD~ --tags --abbrev=0)..HEAD --pretty='format:* %h %s%n  * %an <%ae>' --no-merges >> .github/RELEASE_TEMPLATE.md
-          
-          curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v3.10.0/gomplate_linux-amd64
-          chmod 755 /usr/local/bin/gomplate
-          
-          gomplate --file .github/RELEASE_TEMPLATE.md --out .github/RELEASE_NOTES.md
-      - name: Release with Notes
-        uses: softprops/action-gh-release@v1
-        with:
-          name: Release ${{env.VERSION}}
-          body_path: ".github/RELEASE_NOTES.md"
-          draft: false
-          files: ${{env.BINARY_NAME}}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          build-args: VERSION=${{ needs.release.outputs.new_tag }}
