@@ -151,7 +151,7 @@ func (o OnePassword) Get(options GetOptions) (*Item, error) {
 }
 
 // List lists all added SSH keys.
-func (o OnePassword) List(options ListOptions) ([]*Item, error) {
+func (o OnePassword) List(_ ListOptions) ([]*Item, error) {
 	command := o.Commander.Executor.CommandContext(
 		context.Background(),
 		OnePasswordCommand,
