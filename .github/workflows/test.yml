@@ -1,6 +1,7 @@
-name: Code Check
+name: Tests
 
 on:
+  push:
   pull_request:
 
 jobs:
@@ -11,19 +12,17 @@ jobs:
       - name: Set up Go 1.x
         uses: actions/setup-go@v4
         with:
-          go-version: 1.18.0
+          go-version: ^1.21
         id: go
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get dependencies
         run: |
           go get -v -t -d ./...
-
-      - name: Run Unit tests
-        run: |
-          go test -race -covermode atomic -coverprofile=covprofile ./...
+      - name: go test
+        run: go test -race -covermode atomic -coverprofile=covprofile ./...
 
       - name: Install goveralls
         run: go install github.com/mattn/goveralls@latest
@@ -34,43 +33,32 @@ jobs:
         run: goveralls -coverprofile=covprofile -service=github
 
   vet:
-    name: go vet and statuscheck
+    name: go vet and lint
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.x
         uses: actions/setup-go@v4
         with:
-          go-version: 1.18.0
+          go-version: ^1.21
         id: go
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: go vet
+      - name: Get dependencies
         run: |
           go get -v -t -d ./...
-          go vet ./...
-
-      - name: go staticcheck
-        uses: dominikh/staticcheck-action@v1.3.0
-        with:
-          version: "2022.1"
-          install-go: false
+      - name: go vet
+        run: go vet ./...
 
   golangci:
     name: golangci lint check
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Go 1.x
-        uses: actions/setup-go@v4
-        with:
-          go-version: 1.18.0
-        id: go
-
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.45.2
+          version: v1.54.2
