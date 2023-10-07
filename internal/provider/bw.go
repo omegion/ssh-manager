@@ -155,7 +155,7 @@ func (b Bitwarden) Get(options GetOptions) (*Item, error) {
 }
 
 // List lists all added SSH keys.
-func (b Bitwarden) List(options ListOptions) ([]*Item, error) {
+func (b Bitwarden) List(_ ListOptions) ([]*Item, error) {
 	err := b.Sync()
 	if err != nil {
 		return []*Item{}, err
