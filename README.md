@@ -9,7 +9,7 @@ SSH Key Manager for 1Password, Bitwarden and AWS S3.
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/github/workflow/status/omegion/ssh-manager/Code%20Check" alt="Check"></a>
+    <img src="https://img.shields.io/github/workflow/status/omegion/ssh-manager/Tests" alt="Check"></a>
     <img src="https://coveralls.io/repos/github/omegion/ssh-manager/badge.svg?branch=master" alt="Coverall"></a>
     <img src="https://goreportcard.com/badge/github.com/omegion/ssh-manager" alt="Report"></a>
     <a href="http://pkg.go.dev/github.com/omegion/ssh-manager"><img src="https://img.shields.io/badge/pkg.go.dev-doc-blue" alt="Doc"></a>
