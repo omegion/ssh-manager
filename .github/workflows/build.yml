@@ -11,7 +11,7 @@ on:
       - completed
 
 jobs:
-  release:
+  version:
     name: Release GitHub tag
     runs-on: 'ubuntu-latest'
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -29,16 +29,6 @@ jobs:
         with:
           default_bump: minor
           github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Release with Notes
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
-          draft: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   push:
     name: Push Docker image to Docker Hub
@@ -67,6 +57,51 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/omegion/ssh-manager:latest,ghcr.io/omegion/ssh-manager:${{ needs.release.outputs.new_tag }}
+          tags: ghcr.io/omegion/ssh-manager:latest,ghcr.io/omegion/ssh-manager:${{ needs.version.outputs.new_tag }}
           platforms: linux/amd64,linux/arm64
-          build-args: VERSION=${{ needs.release.outputs.new_tag }}
+          build-args: VERSION=${{ needs.version.outputs.new_tag }}
+  build:
+    name: Create Release
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
+        # List of GOOS and GOARCH pairs from `go tool dist list`
+        goosarch:
+          - 'darwin/amd64'
+          - 'darwin/arm64'
+          - 'linux/amd64'
+          - 'linux/arm64'
+          - 'windows/amd64'
+          - 'windows/arm64'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+      - name: Get OS and arch info
+        run: |
+          GOOSARCH=${{matrix.goosarch}}
+          GOOS=${GOOSARCH%/*}
+          GOARCH=${GOOSARCH#*/}
+          BINARY_NAME=ssh-manager-$GOOS-$GOARCH
+          echo "BINARY_NAME=$BINARY_NAME" >> $GITHUB_ENV
+          echo "GOOS=$GOOS" >> $GITHUB_ENV
+          echo "GOARCH=$GOARCH" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Build
+        run: |
+          make build TARGETOS="$GOOS" TARGETARCH="$GOARCH" VERSION="${{ needs.version.outputs.new_tag }}" BINARY_NAME="$BINARY_NAME"
+
+      - name: Release with Notes
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.version.outputs.new_tag }}
+          name: Release ${{ needs.version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          draft: false
+          files: ${{env.BINARY_NAME}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
