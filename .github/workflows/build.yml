@@ -33,7 +33,7 @@ jobs:
   push:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    needs: [ release ]
+    needs: [ version ]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -63,6 +63,7 @@ jobs:
   build:
     name: Create Release
     runs-on: 'ubuntu-latest'
+    needs: [ version ]
     strategy:
       matrix:
         # List of GOOS and GOARCH pairs from `go tool dist list`
