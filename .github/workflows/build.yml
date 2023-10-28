@@ -1,20 +1,17 @@
 name: Build Docker Image
 
 on:
+  schedule:
+    - cron: '0 0 * * MON'
+  workflow_dispatch:
   push:
     tags:
       - 'v*'
-  workflow_run:
-    workflows: ["Tests"]
-    branches: [master]
-    types:
-      - completed
 
 jobs:
   release:
     name: Release GitHub tag
     runs-on: 'ubuntu-latest'
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: write
     outputs:
