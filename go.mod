@@ -11,7 +11,7 @@ require (
 	github.com/omegion/cobra-commander v0.11.0
 	github.com/omegion/go-aws-v2-interface v0.3.0
 	github.com/sirupsen/logrus v1.9.3
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 	k8s.io/utils v0.0.0-20230505201702-9f6742963106
 )
