@@ -3,7 +3,7 @@ module github.com/omegion/ssh-manager
 go 1.18
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.22.1
+	github.com/aws/aws-sdk-go-v2 v1.22.2
 	github.com/aws/aws-sdk-go-v2/config v1.18.29
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.37.1
 	github.com/go-asset/build v0.0.1
