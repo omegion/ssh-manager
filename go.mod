@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/aws/aws-sdk-go-v2 v1.26.1
 	github.com/aws/aws-sdk-go-v2/config v1.27.13
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.53.2
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.54.0
 	github.com/go-asset/build v0.0.1
 	github.com/golang/mock v1.6.0
 	github.com/omegion/cobra-commander v0.11.0
