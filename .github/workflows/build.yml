@@ -19,7 +19,7 @@ jobs:
       changelog: ${{ steps.tag_version.outputs.changelog }}
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Bump version and push tag
         id: tag_version
@@ -44,7 +44,7 @@ jobs:
     needs: [ release ]
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Login to GitHub
         uses: docker/login-action@v3
@@ -84,7 +84,7 @@ jobs:
           - 'windows/arm64'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - uses: actions/setup-go@v5
