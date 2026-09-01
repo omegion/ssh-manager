@@ -1,6 +1,6 @@
 module github.com/omegion/ssh-manager
 
-go 1.18
+go 1.25
 
 require (
 	github.com/aws/aws-sdk-go-v2 v1.30.3
@@ -13,7 +13,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
-	k8s.io/utils v0.0.0-20240710235135-d4aae2beeffc
+	k8s.io/utils v0.0.0-20260707023825-cf1189d6abe3
 )
 
 require (
